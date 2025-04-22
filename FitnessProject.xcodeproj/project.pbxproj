@@ -6,6 +6,17 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		D1D4DFEF2DA517BD0072DAEE /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = D1D4DFEE2DA517BD0072DAEE /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		D1D4DFF12DA51A070072DAEE /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = D1D4DFF02DA51A070072DAEE /* FirebaseAppCheck */; };
+		D1D4E0122DA51AA70072DAEE /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = D1D4E0112DA51AA70072DAEE /* FirebaseAnalytics */; };
+		D1D4E0142DA51AA70072DAEE /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = D1D4E0132DA51AA70072DAEE /* FirebaseAnalyticsOnDeviceConversion */; };
+		D1D4E0162DA51AA70072DAEE /* FirebaseAppDistribution-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = D1D4E0152DA51AA70072DAEE /* FirebaseAppDistribution-Beta */; };
+		D1F1E22C2DABE73200511DA5 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D1F1E22B2DABE73200511DA5 /* FirebaseAuth */; };
+		D1F1E22E2DABE73200511DA5 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = D1F1E22D2DABE73200511DA5 /* FirebaseDatabase */; };
+		D1F1E2302DABF0A200511DA5 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = D1F1E22F2DABF0A200511DA5 /* FirebaseFirestore */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		5E356E6A2D9BDDC0004048FB /* FitnessProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FitnessProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +34,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1D4DFF12DA51A070072DAEE /* FirebaseAppCheck in Frameworks */,
+				D1F1E22C2DABE73200511DA5 /* FirebaseAuth in Frameworks */,
+				D1D4DFEF2DA517BD0072DAEE /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				D1D4E0162DA51AA70072DAEE /* FirebaseAppDistribution-Beta in Frameworks */,
+				D1D4E0122DA51AA70072DAEE /* FirebaseAnalytics in Frameworks */,
+				D1F1E2302DABF0A200511DA5 /* FirebaseFirestore in Frameworks */,
+				D1F1E22E2DABE73200511DA5 /* FirebaseDatabase in Frameworks */,
+				D1D4E0142DA51AA70072DAEE /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +84,14 @@
 			);
 			name = FitnessProject;
 			packageProductDependencies = (
+				D1D4DFEE2DA517BD0072DAEE /* FirebaseAnalyticsWithoutAdIdSupport */,
+				D1D4DFF02DA51A070072DAEE /* FirebaseAppCheck */,
+				D1D4E0112DA51AA70072DAEE /* FirebaseAnalytics */,
+				D1D4E0132DA51AA70072DAEE /* FirebaseAnalyticsOnDeviceConversion */,
+				D1D4E0152DA51AA70072DAEE /* FirebaseAppDistribution-Beta */,
+				D1F1E22B2DABE73200511DA5 /* FirebaseAuth */,
+				D1F1E22D2DABE73200511DA5 /* FirebaseDatabase */,
+				D1F1E22F2DABF0A200511DA5 /* FirebaseFirestore */,
 			);
 			productName = FitnessProject;
 			productReference = 5E356E6A2D9BDDC0004048FB /* FitnessProject.app */;
@@ -78,7 +105,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1620;
+				LastUpgradeCheck = 1630;
 				TargetAttributes = {
 					5E356E692D9BDDC0004048FB = {
 						CreatedOnToolsVersion = 16.2;
@@ -94,6 +121,9 @@
 			);
 			mainGroup = 5E356E612D9BDDC0004048FB;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				D1D4DFEB2DA515170072DAEE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5E356E6B2D9BDDC0004048FB /* Products */;
 			projectDirPath = "";
@@ -159,7 +189,9 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = TS97MSNQN4;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -220,7 +252,9 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = TS97MSNQN4;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -247,8 +281,8 @@
 				CODE_SIGN_ENTITLEMENTS = FitnessProject/FitnessProject.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"FitnessProject/Preview Content\"";
-				DEVELOPMENT_TEAM = 6C92V3747H;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -286,8 +320,8 @@
 				CODE_SIGN_ENTITLEMENTS = FitnessProject/FitnessProject.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"FitnessProject/Preview Content\"";
-				DEVELOPMENT_TEAM = 6C92V3747H;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -339,6 +373,60 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D1D4DFEB2DA515170072DAEE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.11.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D1D4DFEE2DA517BD0072DAEE /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D1D4DFEB2DA515170072DAEE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		D1D4DFF02DA51A070072DAEE /* FirebaseAppCheck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D1D4DFEB2DA515170072DAEE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAppCheck;
+		};
+		D1D4E0112DA51AA70072DAEE /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D1D4DFEB2DA515170072DAEE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		D1D4E0132DA51AA70072DAEE /* FirebaseAnalyticsOnDeviceConversion */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D1D4DFEB2DA515170072DAEE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsOnDeviceConversion;
+		};
+		D1D4E0152DA51AA70072DAEE /* FirebaseAppDistribution-Beta */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D1D4DFEB2DA515170072DAEE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseAppDistribution-Beta";
+		};
+		D1F1E22B2DABE73200511DA5 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D1D4DFEB2DA515170072DAEE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		D1F1E22D2DABE73200511DA5 /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D1D4DFEB2DA515170072DAEE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+		D1F1E22F2DABF0A200511DA5 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D1D4DFEB2DA515170072DAEE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5E356E622D9BDDC0004048FB /* Project object */;
 }
