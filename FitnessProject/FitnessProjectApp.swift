@@ -30,14 +30,10 @@ struct FitnessProjectApp: App {
     let persistenceController = PersistenceController.shared
     
     @StateObject var AuthVM = AuthViewModel()
-    @StateObject var dataVM = DataViewModel()
 
     var body: some Scene {
         WindowGroup {
-            //EventCreateView()
-            BookingListView(viewModel: ListViewModel(data: dataVM, year: Calendar.current.component(.year, from: Date())))
             ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environmentObject(AuthVM)
         }
     }
