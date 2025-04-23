@@ -14,9 +14,36 @@ struct ContentView: View {
     @EnvironmentObject var AuthVM: AuthViewModel
     @StateObject var dataVM = DataViewModel()
 
+    @State private var valgteTab: Tab = .profil
+    
+    enum Tab {
+            case booking, profil
+        }
+    
     var body: some View {
         if AuthVM.userSession != nil {
-            BookingListView(viewModel: ListViewModel(data: dataVM, year: Calendar.current.component(.year, from: Date())))
+            TabView(selection: $valgteTab) {
+                //Profile
+                NavigationStack {
+                    ProfileView()
+                        .navigationTitle("Profile")
+                }
+                .tabItem {
+                    Label("Profil", systemImage: "person.crop.circle")
+                }
+                .tag(Tab.profil)
+                
+                NavigationStack {
+                    //booking
+                    BookingListView(viewModel: ListViewModel(data: dataVM, year: Calendar.current.component(.year, from: Date())))
+                        .navigationTitle("Booking")
+                }
+                .tabItem {
+                    Label("Booking", systemImage: "calendar")
+                }
+                .tag(Tab.booking)
+            }
+            
         } else {
             GetStartedView()
         }
