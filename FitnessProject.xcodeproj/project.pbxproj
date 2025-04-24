@@ -13,7 +13,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5E87E2202DB936C2009E12E9 /* FitnessProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = FitnessProject.app; path = /Users/peterhannibalhildorf/Documents/FitnessProject/build/Debug/FitnessProject.app; sourceTree = "<absolute>"; };
+		5E87E23F2DBA5E54009E12E9 /* FitnessProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FitnessProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -42,6 +42,7 @@
 			isa = PBXGroup;
 			children = (
 				5E356E6C2D9BDDC0004048FB /* FitnessProject */,
+				5E87E23F2DBA5E54009E12E9 /* FitnessProject.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -70,7 +71,7 @@
 				D16A6D452DB7FEA20078D972 /* FirebaseFirestore */,
 			);
 			productName = FitnessProject;
-			productReference = 5E87E2202DB936C2009E12E9 /* FitnessProject.app */;
+			productReference = 5E87E23F2DBA5E54009E12E9 /* FitnessProject.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -254,6 +255,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
@@ -296,6 +298,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;

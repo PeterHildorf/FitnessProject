@@ -45,39 +45,23 @@ struct BookingListView: View {
                 // Liste over events
                 ScrollView {
                     ForEach(viewModel.sortedEventsAsc) { event in
-                        NavigationLink {
-                            EventFullView(
-                                event: event,
-                                dataViewModel: viewModel.data,
-                                eventViewModel: EventViewModel(data: viewModel.data)
-                            )
-                        } label: {
-                            // Her sender du data med ind i boksen:
-                            EventBoxView(data: viewModel.data, event: event)
+                        NavigationLink(value: event) {
+                            // Kun event med
+                            EventBoxView(event: event)
                         }
-                        .foregroundColor(.black)
-                        
-                        if event.id != viewModel.sortedEventsAsc.last?.id {
-                            Divider()
-                        }
-                        
+                        .tint(.black)
                     }
                 }
-                NavigationLink {
-                    EventCreateView(viewModel: EventViewModel(data: viewModel.data))
-                } label: {
-                    Text("+")
-                        .font(.largeTitle)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(22)
+                .navigationDestination(for: EventModel.self) { event in
+                    // Destination henter altid selv den seneste data fra miljøet
+                    EventFullView(eventID: event.id)
+                }
+                
+                NavigationLink("＋") {
+                    EventCreateView()
                 }
             }
         }
-        .navigationTitle("Booking")
-        .navigationBarTitleDisplayMode(.inline)
-        
     }
     
     
@@ -99,8 +83,23 @@ struct BookingListView: View {
 
 
 
-struct BookingListView_Preview: PreviewProvider {
+
+// Preview
+struct BookingListView_Previews: PreviewProvider {
     static var previews: some View {
-        BookingListView(viewModel: ListViewModel(data: DataViewModel(), year: Calendar.current.component(.year, from: Date())))
+        // Opret og seed EventDataViewModel med sampleData
+        let eventDataVM = EventDataViewModel()
+        eventDataVM.events = EventModel.sampleData
+        
+        // Opret ListViewModel
+        let listVM = ListViewModel(
+            data: eventDataVM,
+            year: Calendar.current.component(.year, from: Date())
+        )
+        
+        return NavigationStack {
+            BookingListView(viewModel: listVM)
+                .environmentObject(eventDataVM)
+        }
     }
 }

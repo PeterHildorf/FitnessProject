@@ -11,20 +11,30 @@ import Foundation
 
 struct EventBoxView: View {
     
-    @ObservedObject var data: DataViewModel        // <-- her får vi fat i din DataViewModel
+    @EnvironmentObject private var eventDataVM: EventDataViewModel
     @State private var booked = false
     let event: EventModel
     
     let buttonWidth: CGFloat = 45
     let buttonHeight: CGFloat = 25
     
-    // Dynamisk læsning af antal deltagere så vi sikre os at når der bliver ændrede i antallet af deltagerene i events så bliver det opdateret
+    // Læser altid live fra din EventDataViewModel.events-liste
     private var memberCount: Int {
-        guard let idx = data.events.firstIndex(where: { $0.id == event.id }) else {
+        if let idx = eventDataVM.events.firstIndex(where: { $0.id == event.id }) {
+            return eventDataVM.events[idx].EventMemembers.count
+        } else {
+            // Fald tilbage på det event-objekt, du fik sendt ind
             return event.EventMemembers.count
         }
-        return data.events[idx].EventMemembers.count
     }
+    
+    private var isBooked: Bool {
+        eventDataVM.events
+          .first(where: { $0.id == event.id })?
+          .EventMemembers
+          .contains("Alexander") ?? false
+    }
+
     
     private var isFull: Bool {
         memberCount >= event.EventSlots
@@ -60,20 +70,19 @@ struct EventBoxView: View {
             VStack{
                 Button( action: {
                     //skal opdatere en liste
-                    guard !isFull || booked else { return }
+                    guard !isFull || isBooked else { return }
                     booked.toggle()
-                    if booked {
-                        data.addMember(to: event.id, member: "Alexander")     // indsæt den rigtige bruger‑streng her
+                    if isBooked {
+                        eventDataVM.removeMember(from: event.id, member: "Alexander")
                     } else {
-                        data.removeMember(from: event.id, member: "Alexander")
+                        eventDataVM.addMember(to: event.id, member: "Alexander")
                     }
-                    print("Tryk")
                 }) {
                     Group{
-                        if isFull {
+                        if isFull && !isBooked {
                             Text("Full")
                         }
-                        else if booked {
+                        else if isBooked {
                             Image(systemName: "checkmark.circle.fill")
                         } else {
                             Text("Book")
@@ -98,10 +107,14 @@ struct EventBoxView: View {
 
 struct EventBoxView_Previews: PreviewProvider {
     static var previews: some View {
-        // Opret en preview‑instans af din DataViewModel
-        let previewData = DataViewModel()
-        // Giv EventBoxView både data og event
-        EventBoxView(data: previewData,
-                     event: EventModel.sampleData[0])
+        // Opret en preview-instans af EventDataViewModel og seed med sampleData
+        let previewVM = EventDataViewModel()
+        previewVM.events = EventModel.sampleData
+        
+        return EventBoxView(event: previewVM.events[0])
+            .environmentObject(previewVM)
+            .padding()
     }
 }
+
+

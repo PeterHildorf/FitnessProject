@@ -30,11 +30,12 @@ struct FitnessProjectApp: App {
     let persistenceController = PersistenceController.shared
     
     @StateObject var AuthVM = AuthViewModel()
-
+    @StateObject var eventDataVM = EventDataViewModel()
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(AuthVM)
+                .environmentObject(eventDataVM)
         }
     }
 }
