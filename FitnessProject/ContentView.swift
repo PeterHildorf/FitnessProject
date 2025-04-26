@@ -16,7 +16,8 @@ struct ContentView: View {
 
     var body: some View {
         if AuthVM.userSession != nil {
-            BookingListView(viewModel: ListViewModel(data: dataVM, year: Calendar.current.component(.year, from: Date())))
+//            BookingListView(viewModel: ListViewModel(data: dataVM, year: Calendar.current.component(.year, from: Date())))
+            ProfileView()
         } else {
             GetStartedView()
         }

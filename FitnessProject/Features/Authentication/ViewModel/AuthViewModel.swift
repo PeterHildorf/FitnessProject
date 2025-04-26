@@ -12,13 +12,21 @@ import FirebaseFirestore
 
 @MainActor
 class AuthViewModel: ObservableObject {
-    @Published var userSession: FirebaseAuth.User?
+    @Published var userSession: UserProtocol?
     @Published var currentUser: User?
     @Published var seletedType: String = "Member"
     @Published var error: Validation?
     @Published var hasError: Bool = false
     
-    init() {
+    private let authService: AuthService
+    private let firestoreService: FirestoreService
+    private let validator = CreateValidator()
+    
+    init(authService: AuthService = AuthService(), firestoreService: FirestoreService = FirestoreService()) {
+        //Injecting the Firebase services into the view model
+        self.authService = authService
+        self.firestoreService = firestoreService
+        
         //Checks if there is a current user logged in, when the view model initializes.
         self.userSession = Auth.auth().currentUser
         
@@ -27,13 +35,11 @@ class AuthViewModel: ObservableObject {
         }
     }
     
-    private let validator = CreateValidator()
-    
     func signIn(_ email: String,_ password: String) async throws {
         do {
-            let result = try await Auth.auth().signIn(withEmail: email, password: password)
-            self.userSession = result.user
-            await fetchUser()
+            let result = try await authService.signIn(email, password)
+            self.userSession = result
+            self.currentUser = await firestoreService.fetchUser(id: result.uid)
         } catch {
             self.error = .custom(.authFailed)
             self.hasError = true
@@ -43,38 +49,35 @@ class AuthViewModel: ObservableObject {
     func createNewUser(_ email: String,_ password: String,_ role: String,_ fullname: String) async throws {
         do {
             try validator.validate(email, password)
-            let result = try await Auth.auth().createUser(withEmail: email, password: password)
-            self.userSession = result.user
-            let user = User(id: result.user.uid, fullname: fullname, email: email, role: role)
-            let encodedUser = try Firestore.Encoder().encode(user)
-            try await Firestore.firestore().collection("users").document(user.id).setData(encodedUser)
+            let result = try await authService.createNewUser(email, password)
+            self.userSession = result
+            let user = User(id: result.uid, fullname: fullname, email: email, role: role)
+            try await firestoreService.saveUser(user: user)
             await fetchUser()
         } catch let error as CreateValidator.CreateValidatorError {
             self.error = .custom(error)
             self.hasError = true
         } catch {
-            self.error = .firebase("An unexpected error occurred: \(error.localizedDescription)")
+            self.error = .firebase("\(error.localizedDescription)")
             self.hasError = true
         }
     }
     
     func signOut() {
-        do {
-            try Auth.auth().signOut()
-            self.userSession = nil
-            self.currentUser = nil
-        } catch {
-            print("Failed to sign out")
-        }
+        authService.signOut()
+        self.userSession = nil
+        self.currentUser = nil
     }
     
     func fetchUser() async {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let id = authService.getCurrentUserById()
         
-        guard let userDocument = try? await Firestore.firestore().collection("users").document(uid).getDocument() else { return }
-        
-        //Decodes the data from firebase into the user model.
-        self.currentUser = try? userDocument.data(as: User.self)
+        if id != nil {
+            let user = await firestoreService.fetchUser(id: id!)
+            self.currentUser = user
+        } else {
+            self.currentUser = nil
+        }
     }
     
     enum Validation: LocalizedError {
@@ -87,7 +90,7 @@ class AuthViewModel: ObservableObject {
             case .custom(let error):
                 return error.localizedDescription
             case .firebase(let message), .firestore(let message):
-                return message
+                return "Something went wrong!"
             }
         }
         

@@ -12,14 +12,30 @@
 		D16A6D462DB7FEA20078D972 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = D16A6D452DB7FEA20078D972 /* FirebaseFirestore */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		D1C2BCDE2DBCE33300F7646A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5E356E622D9BDDC0004048FB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5E356E692D9BDDC0004048FB;
+			remoteInfo = FitnessProject;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		5E356E6A2D9BDDC0004048FB /* FitnessProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FitnessProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D1C2BCDA2DBCE33300F7646A /* FitnessProjectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FitnessProjectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		5E356E6C2D9BDDC0004048FB /* FitnessProject */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = FitnessProject;
+			sourceTree = "<group>";
+		};
+		D1C2BCDB2DBCE33300F7646A /* FitnessProjectTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FitnessProjectTests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -35,6 +51,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D1C2BCD72DBCE33300F7646A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -42,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				5E356E6C2D9BDDC0004048FB /* FitnessProject */,
+				D1C2BCDB2DBCE33300F7646A /* FitnessProjectTests */,
 				5E356E6B2D9BDDC0004048FB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -50,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				5E356E6A2D9BDDC0004048FB /* FitnessProject.app */,
+				D1C2BCDA2DBCE33300F7646A /* FitnessProjectTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -82,6 +107,29 @@
 			productReference = 5E356E6A2D9BDDC0004048FB /* FitnessProject.app */;
 			productType = "com.apple.product-type.application";
 		};
+		D1C2BCD92DBCE33300F7646A /* FitnessProjectTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D1C2BCE02DBCE33300F7646A /* Build configuration list for PBXNativeTarget "FitnessProjectTests" */;
+			buildPhases = (
+				D1C2BCD62DBCE33300F7646A /* Sources */,
+				D1C2BCD72DBCE33300F7646A /* Frameworks */,
+				D1C2BCD82DBCE33300F7646A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D1C2BCDF2DBCE33300F7646A /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D1C2BCDB2DBCE33300F7646A /* FitnessProjectTests */,
+			);
+			name = FitnessProjectTests;
+			packageProductDependencies = (
+			);
+			productName = FitnessProjectTests;
+			productReference = D1C2BCDA2DBCE33300F7646A /* FitnessProjectTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -89,11 +137,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1620;
+				LastSwiftUpdateCheck = 1630;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
 					5E356E692D9BDDC0004048FB = {
 						CreatedOnToolsVersion = 16.2;
+					};
+					D1C2BCD92DBCE33300F7646A = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = 5E356E692D9BDDC0004048FB;
 					};
 				};
 			};
@@ -115,12 +167,20 @@
 			projectRoot = "";
 			targets = (
 				5E356E692D9BDDC0004048FB /* FitnessProject */,
+				D1C2BCD92DBCE33300F7646A /* FitnessProjectTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		5E356E682D9BDDC0004048FB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D1C2BCD82DBCE33300F7646A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -137,7 +197,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D1C2BCD62DBCE33300F7646A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D1C2BCDF2DBCE33300F7646A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5E356E692D9BDDC0004048FB /* FitnessProject */;
+			targetProxy = D1C2BCDE2DBCE33300F7646A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		5E356E7C2D9BDDC2004048FB /* Debug */ = {
@@ -338,6 +413,47 @@
 			};
 			name = Release;
 		};
+		D1C2BCE12DBCE33300F7646A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TS97MSNQN4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = DTU.FitnessProjectTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FitnessProject.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FitnessProject";
+			};
+			name = Debug;
+		};
+		D1C2BCE22DBCE33300F7646A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TS97MSNQN4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = DTU.FitnessProjectTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FitnessProject.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FitnessProject";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -355,6 +471,15 @@
 			buildConfigurations = (
 				5E356E7F2D9BDDC2004048FB /* Debug */,
 				5E356E802D9BDDC2004048FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D1C2BCE02DBCE33300F7646A /* Build configuration list for PBXNativeTarget "FitnessProjectTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D1C2BCE12DBCE33300F7646A /* Debug */,
+				D1C2BCE22DBCE33300F7646A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
