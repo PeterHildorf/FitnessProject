@@ -8,70 +8,122 @@
 import XCTest
 @testable import FitnessProject
 
+@MainActor
 final class AuthenticationTest: XCTestCase {
+    private var viewModel: AuthViewModel!
+    private var mockAuthService: MockAuthService = MockAuthService()
+    private var mockFirestoreService: MockFirestoreService  = MockFirestoreService()
+
     override func setUp() {
-        <#code#>
+        super.setUp()
+        viewModel = AuthViewModel(authService: mockAuthService, firestoreService: mockFirestoreService)
     }
     
     override func tearDown() {
-        <#code#>
+        viewModel = nil
+        mockAuthService = MockAuthService()
+        mockFirestoreService = MockFirestoreService()
+        super.tearDown()
     }
     
-    func testEmptyEmail() {
+    func testSignInSuccess() async {
+        let email = "mock@gmail.com"
+        let password = "mock123"
+        let user = "mock_uid"
+        
+        try? await viewModel.signIn(email, password)
+        
+        
+        XCTAssertEqual(viewModel.userSession?.uid, user)
+        XCTAssertEqual(viewModel.currentUser?.id, user)
+    }
+    
+    func testSignInFailure() async {
+        let email = "wrong_mock@gmail.com"
+        let password = "wrong_mock123"
+        
+        try? await viewModel.signIn(email, password)
+        
+        
+        XCTAssertTrue(viewModel.hasError)
+        XCTAssertEqual(viewModel.error?.errorDescription, "Unable to Sign In")
+        XCTAssertEqual(viewModel.error?.failureReason, "Incorrect email or password. Please try again.")
+    }
+    
+    func testSignUpSuccess() async {
+        let email = "newMock@gmail.com"
+        let password = "newMock123"
+        let role = "Instructor"
+        let fullname = "New Mock"
+        
+        mockAuthService.currentUser = "new_mock_uid"
+        
+        try? await viewModel.createNewUser(email, password, role, fullname)
+        
+        
+        XCTAssertEqual(viewModel.userSession?.uid, "new_mock_uid")
+        XCTAssertEqual(viewModel.currentUser?.email, email)
+        XCTAssertEqual(viewModel.currentUser?.role, role)
+        XCTAssertEqual(viewModel.currentUser?.fullname, fullname)
+    }
+    
+    func testSignUpFailure() async {
+        let email = "newMock@gmail.com"
+        let password = "newMock123"
+        let role = "Instructor"
+        let fullname = "New Mock"
+        
+        mockAuthService.serverFailure = true
+        
+        try? await viewModel.createNewUser(email, password, role, fullname)
+        
+        
+        XCTAssertTrue(viewModel.hasError)
+        XCTAssertEqual(viewModel.error?.errorDescription, "Something went wrong!")
+        XCTAssertEqual(viewModel.error?.failureReason, "The operation couldn’t be completed. Server failure")
+    }
+    
+    func testSignOut() {
+        viewModel.signOut()
+        
+        XCTAssertTrue(mockAuthService.signedOut)
+        XCTAssertNil(viewModel.userSession)
+        XCTAssertNil(viewModel.currentUser)
+    }
+    
+    func testEmptyEmail() async {
         let email = ""
-        let password = "test123"
-        let validator = CreateValidator()
+        let password = "newMock123"
         
-        do {
-            try validator.validate(email, password)
-        } catch {
-            let error = error as! CreateValidator.CreateValidatorError
-            
-            XCTAssertEqual(error.failureReason, "Email address is required")
-        }
+        await assertEqualValidationError(email, password, "Invalid Email", "Email address is required")
     }
     
-    func testInvalidEmail() {
-        let email = "Blah.blach123"
-        let password = "test123"
-        let validator = CreateValidator()
+    func testInvalidEmail() async {
+        let email = "Mock@@gmail.com"
+        let password = "newMock123"
         
-        do {
-            try validator.validate(email, password)
-        } catch {
-            let error = error as! CreateValidator.CreateValidatorError
-            
-            XCTAssertEqual(error.failureReason, "Please type a valid email address")
-        }
+        await assertEqualValidationError(email, password, "Invalid Email", "Please type a valid email address")
     }
     
-    func testEmptyPassword() {
-        let email = "test@gmail.com"
+    func testEmptyPassword() async {
+        let email = "Mock@gmail.com"
         let password = ""
-        let validator = CreateValidator()
         
-        do {
-            try validator.validate(email, password)
-        } catch {
-            let error = error as! CreateValidator.CreateValidatorError
-            
-            XCTAssertEqual(error.failureReason, "Password is required")
-        }
+        await assertEqualValidationError(email, password, "Invalid Password", "Password is required")
     }
     
-    func testInvalidPassword() {
-        let email = "test@gmail.com"
-        let password = "test12"
-        let validator = CreateValidator()
+    func testInvalidPassword() async {
+        let email = "Mock@gmail.com"
+        let password = "mock"
         
-        do {
-            try validator.validate(email, password)
-        } catch {
-            let error = error as! CreateValidator.CreateValidatorError
-            
-            XCTAssertEqual(error.failureReason, "Password must be at least 6 characters long")
-        }
+        await assertEqualValidationError(email, password, "Invalid Password", "Password must be at least 6 characters long")
     }
     
-    
+    func assertEqualValidationError(_ email: String,_ password: String,_ expectedErrorDescription: String,_ expectedFailureReason: String) async {
+        
+        try? await viewModel.createNewUser(email, password, "Instructor", "Mock")
+        
+        XCTAssertEqual(viewModel.error?.errorDescription, expectedErrorDescription)
+        XCTAssertEqual(viewModel.error?.failureReason, expectedFailureReason)
+    }
 }

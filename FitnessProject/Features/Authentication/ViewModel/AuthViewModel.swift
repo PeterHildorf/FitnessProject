@@ -18,11 +18,11 @@ class AuthViewModel: ObservableObject {
     @Published var error: Validation?
     @Published var hasError: Bool = false
     
-    private let authService: AuthService
-    private let firestoreService: FirestoreService
+    private let authService: AuthServiceProtocol
+    private let firestoreService: FirestoreServiceProtocol
     private let validator = CreateValidator()
     
-    init(authService: AuthService = AuthService(), firestoreService: FirestoreService = FirestoreService()) {
+    init(authService: AuthServiceProtocol = AuthService(), firestoreService: FirestoreServiceProtocol = FirestoreService()) {
         //Injecting the Firebase services into the view model
         self.authService = authService
         self.firestoreService = firestoreService
@@ -58,7 +58,7 @@ class AuthViewModel: ObservableObject {
             self.error = .custom(error)
             self.hasError = true
         } catch {
-            self.error = .firebase("\(error.localizedDescription)")
+            self.error = .firestore("\(error.localizedDescription)")
             self.hasError = true
         }
     }
@@ -82,14 +82,13 @@ class AuthViewModel: ObservableObject {
     
     enum Validation: LocalizedError {
         case custom(CreateValidator.CreateValidatorError)
-        case firebase(String)
         case firestore(String)
         
         var errorDescription: String? {
             switch self {
             case .custom(let error):
                 return error.localizedDescription
-            case .firebase(let message), .firestore(let message):
+            case .firestore(let message):
                 return "Something went wrong!"
             }
         }
@@ -98,7 +97,7 @@ class AuthViewModel: ObservableObject {
             switch self {
             case .custom(let error):
                 return error.failureReason
-            case .firebase(let message), .firestore(let message):
+            case .firestore(let message):
                 return message
             }
         }

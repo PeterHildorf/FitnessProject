@@ -10,7 +10,7 @@ import FirebaseAuth
 import FirebaseCore
 import FirebaseFirestore
 
-class FirestoreService {
+class FirestoreService: FirestoreServiceProtocol {
     func saveUser(user: User) async throws  {
         let encodedUser = try Firestore.Encoder().encode(user)
         try await Firestore.firestore().collection("users").document(user.id).setData(encodedUser)
