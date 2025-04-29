@@ -43,7 +43,7 @@ struct EventFullView: View {
                                 Label("\(event.EventMemembers.count)/\(event.EventSlots)",
                                       systemImage: "person.3")
                             }
-                            Label(event.EventTrainer, systemImage: "person")
+                            Label(event.EventTrainerName, systemImage: "person")
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding()

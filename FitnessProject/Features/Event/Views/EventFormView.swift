@@ -4,18 +4,18 @@ import SwiftUI
 /// Du binder direkte dine @State‑felter ind med Binding.
 struct EventFormView: View {
     // Bindings som taler med parent‑viewets @State-variabler
+    @EnvironmentObject var eventVM: EventDataViewModel
+    
     @Binding var title: String
     @Binding var duration: Int
-    @Binding var trainer: String
+    @Binding var selectedTrainer: User
     @Binding var location: String
     @Binding var slots: Int
     @Binding var date: Date
     @Binding var description: String
-    
     // Fælles konfigurationsdata
     let types       = ["Fitness","Run","Yoga"]
     let durations   = [30,60,90,180]
-    let trainers    = ["Peter Hildorf","Victor Mandrup","Mathias Larsen"]
     let slotOptions = [5,10,15,20,25]
     
     // Label & action for knappen
@@ -47,11 +47,24 @@ struct EventFormView: View {
 
                 // Instruktør
                 Text("Instruktør").font(.headline)
-                Picker("", selection: $trainer) {
-                    ForEach(trainers, id:\.self) { Text($0).tag($0) }
+                Picker(selection: $selectedTrainer) {
+                    ForEach(eventVM.instructors) { instr in
+                        Text(instr.fullname).tag(instr)
+                    }
+                } label: {
+                    Text(selectedTrainer.fullname)
                 }
                 .pickerStyle(.menu)
+                
+                // start værdi for trainerID, hvor vi vælgerden første i listen
+                .onAppear {
+                    if selectedTrainer.id.isEmpty {
+                        selectedTrainer = eventVM.instructors.first!
+                    }
+                }
 
+                
+                
                 // Antal pladser
                 Text("Pladser").font(.headline)
                 Picker("", selection: $slots) {

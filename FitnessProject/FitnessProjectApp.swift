@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Firebase
 import FirebaseCore
 import FirebaseFirestore
 import FirebaseAuth
@@ -17,6 +18,19 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         AppCheck.setAppCheckProviderFactory(providerFactory)
         
         FirebaseApp.configure()
+        /*
+        var settings = Firestore.firestore().settings
+    
+        // Anvender offline cache via cache settings
+        
+        settings.cacheSettings = PersistentCacheSettings(
+            // FirestoreCacheSizeUnlimited er en NSNumber-konstant, der deaktiverer automatisk oprydning
+            sizeBytes: NSNumber(value: FirestoreCacheSizeUnlimited)
+        )
+        
+        
+        Firestore.firestore().settings = settings
+         */
         
         return true
     }

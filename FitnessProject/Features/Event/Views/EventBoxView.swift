@@ -8,7 +8,7 @@
 
 import SwiftUI
 import Foundation
-
+import FirebaseAuth
 struct EventBoxView: View {
     
     @EnvironmentObject private var eventDataVM: EventDataViewModel
@@ -29,11 +29,12 @@ struct EventBoxView: View {
     }
     
     private var isBooked: Bool {
-        eventDataVM.events
+        guard let uid = Auth.auth().currentUser?.uid else { return false }
+        return eventDataVM.events
           .first(where: { $0.id == event.id })?
           .EventMemembers
-          .contains("Alexander") ?? false
-    }
+          .contains(uid) ?? false
+      }
 
     
     private var isFull: Bool {
@@ -60,7 +61,7 @@ struct EventBoxView: View {
                 
                 Text(event.EventTitle)
                     .bold()
-                Text("m/\(event.EventTrainer)")
+                Text("m/\(event.EventTrainerName)")
                 Text(event.EventLocation)
                     .font(.footnote)
             }
@@ -73,9 +74,9 @@ struct EventBoxView: View {
                     guard !isFull || isBooked else { return }
                     booked.toggle()
                     if isBooked {
-                        eventDataVM.removeMember(from: event.id, member: "Alexander")
+                        eventDataVM.removeMember(from: event.id.uuidString)
                     } else {
-                        eventDataVM.addMember(to: event.id, member: "Alexander")
+                        eventDataVM.addMember(to: event.id.uuidString)
                     }
                 }) {
                     Group{
@@ -104,7 +105,7 @@ struct EventBoxView: View {
 }
 
 
-
+/*
 struct EventBoxView_Previews: PreviewProvider {
     static var previews: some View {
         // Opret en preview-instans af EventDataViewModel og seed med sampleData
@@ -116,5 +117,6 @@ struct EventBoxView_Previews: PreviewProvider {
             .padding()
     }
 }
+ */
 
 

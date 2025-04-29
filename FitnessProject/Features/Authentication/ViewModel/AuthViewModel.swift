@@ -20,8 +20,10 @@ class AuthViewModel: ObservableObject {
     
     init() {
         //Checks if there is a current user logged in, when the view model initializes.
-        self.userSession = Auth.auth().currentUser
-        
+        let existing = Auth.auth().currentUser
+        print("### currentUser ved init:", existing?.uid ?? "nil")
+        self.userSession = existing
+
         Task {
             await fetchUser()
         }
@@ -40,12 +42,30 @@ class AuthViewModel: ObservableObject {
         }
     }
     
-    func createNewUser(_ email: String,_ password: String,_ role: String,_ fullname: String) async throws {
+    func createNewUser(_ email: String,
+                       _ password: String,
+                       _ role: String,
+                       _ fullname: String
+    ) async throws {
         do {
             try validator.validate(email, password)
-            let result = try await Auth.auth().createUser(withEmail: email, password: password)
+            let result = try await Auth.auth().createUser(
+                withEmail: email,
+                password: password
+            )
             self.userSession = result.user
-            let user = User(id: result.user.uid, fullname: fullname, email: email, role: role)
+            
+            let roleEnum = UserRole(rawValue: role.lowercased()) ?? .member
+
+            let user = User(
+                id: result.user.uid,
+                fullname: fullname,
+                email: email,
+                role: roleEnum,
+                createdEvents: [],
+                attendingEvents:  []
+            )
+            
             let encodedUser = try Firestore.Encoder().encode(user)
             try await Firestore.firestore().collection("users").document(user.id).setData(encodedUser)
             await fetchUser()
@@ -69,12 +89,25 @@ class AuthViewModel: ObservableObject {
     }
     
     func fetchUser() async {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        
-        guard let userDocument = try? await Firestore.firestore().collection("users").document(uid).getDocument() else { return }
-        
-        //Decodes the data from firebase into the user model.
-        self.currentUser = try? userDocument.data(as: User.self)
+      guard let authUser = Auth.auth().currentUser else { return }
+
+      let snapshot = try? await Firestore.firestore()
+        .collection("users")
+        .document(authUser.uid)
+        .getDocument()
+
+      if let snapshot, snapshot.exists {
+        self.currentUser = try? snapshot.data(as: User.self)
+      } else {
+        // Ingen Firestore-data → tving en logout
+        do {
+          try Auth.auth().signOut()
+        } catch {
+          print("Fejl ved signOut:", error)
+        }
+        self.userSession = nil
+        self.currentUser = nil
+      }
     }
     
     enum Validation: LocalizedError {
