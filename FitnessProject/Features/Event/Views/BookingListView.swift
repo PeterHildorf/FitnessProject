@@ -12,6 +12,8 @@ struct BookingListView: View {
     
     @StateObject var viewModel: ListViewModel
     @EnvironmentObject var eventDataVM: EventDataViewModel  // ← tilføj
+    @EnvironmentObject private var authVM: AuthViewModel          // ← NY
+
     
     var body: some View {
         NavigationStack {
@@ -61,9 +63,10 @@ struct BookingListView: View {
                     // Destination henter altid selv den seneste data fra miljøet
                     EventFullView(eventID: event.id)
                 }
-                
-                NavigationLink("＋") {
-                    EventCreateView()
+                if authVM.currentRole == .instructor {
+                    NavigationLink("＋") {
+                        EventCreateView()
+                    }
                 }
             }
         }

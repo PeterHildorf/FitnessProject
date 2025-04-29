@@ -7,7 +7,7 @@ struct EditEventView: View {
 
     @State private var title             = ""
     @State private var duration          = 30
-    @State private var selectedTrainer   = User(id: "", fullname: "", email: "", role: .instructor, createdEvents: [], attendingEvents: [])
+    @State private var selectedTrainer: User? = nil    // ← Gør den optional
     @State private var location          = ""
     @State private var slots             = 0
     @State private var date              = Date()
@@ -18,34 +18,41 @@ struct EditEventView: View {
     }
 
     var body: some View {
-        EventFormView(
-            title: $title,
-            duration: $duration,
-            selectedTrainer: $selectedTrainer,
-            location: $location,
-            slots: $slots,
-            date: $date,
-            description: $description,
-            buttonTitle: "Opdater Event"
-        ) {
-            let updated = EventModel(
-                id: event.id,
-                EventTitle: title,
-                EventDuration: duration,
-                EventTrainer: selectedTrainer.id,
-                EventTrainerName: selectedTrainer.fullname,
-                EventLocation: location,
-                EventMemembers: event.EventMemembers,
-                EventSlots: slots,
-                EventDate: date,
-                EventPicture: title,
-                EventDescription: description
-            )
-            eventDataVM.updateEvent(updated)
-            dismiss()
+        Group {
+          if let trainer = selectedTrainer {
+            EventFormView(
+                title: $title,
+                duration: $duration,
+                selectedTrainer: $selectedTrainer,
+                location: $location,
+                slots: $slots,
+                date: $date,
+                description: $description,
+                buttonTitle: "Opdater Event"
+            ) {
+                let updated = EventModel(
+                    id: event.id,
+                    EventTitle: title,
+                    EventDuration: duration,
+                    EventTrainer: trainer.id,
+                    EventTrainerName: trainer.fullname,
+                    EventLocation: location,
+                    EventMemembers: event.EventMemembers,
+                    EventSlots: slots,
+                    EventDate: date,
+                    EventPicture: title,
+                    EventDescription: description
+                )
+                eventDataVM.updateEvent(updated)
+                dismiss()
+            }
+          } else {
+            ProgressView("Henter event…")
+          }
         }
-        .navigationTitle("Rediger Event")   // ← indeni body
+        .navigationTitle("Rediger Event")
         .onAppear {
+            // Populér felterne
             title       = event.EventTitle
             duration    = event.EventDuration
             location    = event.EventLocation
@@ -53,9 +60,12 @@ struct EditEventView: View {
             date        = event.EventDate
             description = event.EventDescription
 
-            if let instr = eventDataVM.instructors.first(where: { $0.id == event.EventTrainer }) {
-                selectedTrainer = instr
+            // Find og sæt selectedTrainer når dine instructors er hentet
+            if selectedTrainer == nil {
+                selectedTrainer = eventDataVM.instructors
+                    .first(where: { $0.id == event.EventTrainer })
             }
         }
     }
 }
+

@@ -3,29 +3,28 @@ import SwiftUI
 /// Genbrugelig form til både oprettelse og redigering.
 /// Du binder direkte dine @State‑felter ind med Binding.
 struct EventFormView: View {
-    // Bindings som taler med parent‑viewets @State-variabler
     @EnvironmentObject var eventVM: EventDataViewModel
+    @EnvironmentObject var authVM: AuthViewModel
     
     @Binding var title: String
     @Binding var duration: Int
-    @Binding var selectedTrainer: User
+    @Binding var selectedTrainer: User?
     @Binding var location: String
     @Binding var slots: Int
     @Binding var date: Date
     @Binding var description: String
-    // Fælles konfigurationsdata
+    
     let types       = ["Fitness","Run","Yoga"]
     let durations   = [30,60,90,180]
     let slotOptions = [5,10,15,20,25]
     
-    // Label & action for knappen
     let buttonTitle: String
     let buttonAction: () -> Void
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                // Træningstype
+                // 1) Title
                 Text("Event Title").font(.headline)
                 Picker("", selection: $title) {
                     ForEach(types, id: \.self) { Text($0).tag($0) }
@@ -35,60 +34,53 @@ struct EventFormView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .cornerRadius(10)
-
-                // Varighed
+                
+                // 2) Duration
                 Text("Varighed").font(.headline)
                 Picker("", selection: $duration) {
-                    ForEach(durations, id:\.self) {
-                        Text("\($0) min").tag($0)
-                    }
+                    ForEach(durations, id: \.self) { Text("\($0) min").tag($0) }
                 }
                 .pickerStyle(.menu)
-
-                // Instruktør
+                
+                // 3) Instruktør
                 Text("Instruktør").font(.headline)
-                Picker(selection: $selectedTrainer) {
-                    ForEach(eventVM.instructors) { instr in
-                        Text(instr.fullname).tag(instr)
+                
+                if selectedTrainer != nil {
+                    Picker("Vælg instruktør", selection: $selectedTrainer) {
+                        ForEach(eventVM.instructors) { instr in
+                            Text(instr.fullname).tag(Optional(instr))
+                        }
                     }
-                } label: {
-                    Text(selectedTrainer.fullname)
+                    .pickerStyle(.menu)
+                } else {
+                    Text("No selections available")
+                        .foregroundColor(.red)
                 }
-                .pickerStyle(.menu)
                 
-                // start værdi for trainerID, hvor vi vælgerden første i listen
-                .onAppear {
-                    if selectedTrainer.id.isEmpty {
-                        selectedTrainer = eventVM.instructors.first!
-                    }
-                }
-
-                
-                
-                // Antal pladser
+                // 4) Pladser
                 Text("Pladser").font(.headline)
                 Picker("", selection: $slots) {
-                    ForEach(slotOptions, id:\.self) { Text("\($0)").tag($0) }
+                    ForEach(slotOptions, id: \.self) { Text("\($0)").tag($0) }
                 }
                 .pickerStyle(.segmented)
-
-                // Lokation
+                
+                // 5) Lokation
                 Text("Lokation").font(.headline)
                 TextField("Indtast lokation", text: $location)
                     .textFieldStyle(UnderlinedTextFieldStyle())
-
-                // Dato
+                
+                // 6) Dato & tid
                 Text("Dato & tid").font(.headline)
                 DatePicker("", selection: $date)
                     .datePickerStyle(.compact)
-
-                // Beskrivelse
+                
+                // 7) Beskrivelse
                 Text("Beskrivelse").font(.headline)
                 TextEditor(text: $description)
                     .outlinedTextEditorStyle()
                     .frame(height: 100)
                 
-                // Gem/Opdater‑knap
+                // 8) Knap
                 Button(buttonTitle, action: buttonAction)
                     .frame(maxWidth: .infinity, minHeight: 44)
                     .background(Color.blue.cornerRadius(8))
@@ -96,8 +88,20 @@ struct EventFormView: View {
             }
             .padding()
         }
+        // Lyt på instructors-publisheren, ikke .onAppear
+        .onReceive(eventVM.$instructors) { instructors in
+            guard selectedTrainer == nil,
+                  !instructors.isEmpty,
+                  let uid = authVM.currentUser?.id,
+                  let me = instructors.first(where: { $0.id == uid })
+            else { return }
+            selectedTrainer = me
+        }
+        
     }
 }
+
+
 
 // Håndter underlinet textfield style
 struct UnderlinedTextFieldStyle: TextFieldStyle {
@@ -132,3 +136,5 @@ extension View {
         self.modifier(OutlinedTextEditorStyle())
     }
 }
+
+

@@ -8,48 +8,48 @@
 import SwiftUI
 
 struct EventCreateView: View {
-    @EnvironmentObject private var eventDataVM: EventDataViewModel
-    @Environment(\.dismiss) private var dismiss
+  @EnvironmentObject private var eventDataVM: EventDataViewModel
+  @Environment(\.dismiss) private var dismiss
 
-    @State private var title             = "Fitness"
-    @State private var duration          = 30
-    @State private var selectedTrainer   = User(id: "", fullname: "", email: "", role: .instructor, createdEvents: [], attendingEvents: [])
-    @State private var location          = ""
-    @State private var slots             = 10
-    @State private var date              = Date()
-    @State private var description       = ""
+  @State private var title           = "Fitness"
+  @State private var duration        = 30
+  @State private var selectedTrainer: User? = nil   // <-- skal være optional
+  @State private var location        = ""
+  @State private var slots           = 10
+  @State private var date            = Date()
+  @State private var description     = ""
 
-    var body: some View {
-        // Her er én sammenhængende View-instans
-        EventFormView(
-            title: $title,
-            duration: $duration,
-            selectedTrainer: $selectedTrainer,
-            location: $location,
-            slots: $slots,
-            date: $date,
-            description: $description,
-            buttonTitle: "Opret Event"
-        ) {
-            eventDataVM.createEvent(
-                title: title,
-                duration: duration,
-                trainer: selectedTrainer.id,
-                trainerName: selectedTrainer.fullname,
-                location: location,
-                members: [],
-                slots: slots,
-                date: date,
-                picture: title,
-                description: description
-            )
-            dismiss()
-        }
-        .navigationTitle("Opret Event")    // ← nu indeni body
-        .onAppear {
-            if eventDataVM.instructors.first != nil && selectedTrainer.id.isEmpty {
-                selectedTrainer = eventDataVM.instructors.first!
-            }
-        }
+  var body: some View {
+    EventFormView(
+      title: $title,
+      duration: $duration,
+      selectedTrainer: $selectedTrainer,
+      location: $location,
+      slots: $slots,
+      date: $date,
+      description: $description,
+      buttonTitle: "Opret Event"
+    ) {
+      guard let trainer = selectedTrainer else { return }
+      eventDataVM.createEvent(
+        title: title,
+        duration: duration,
+        trainerID: trainer.id,
+        trainerName: trainer.fullname,
+        location: location,
+        members: [],
+        slots: slots,
+        date: date,
+        picture: title,
+        description: description
+      )
+      dismiss()
     }
+    .navigationTitle("Opret Event")
+    .onAppear {
+      if selectedTrainer == nil {
+        selectedTrainer = eventDataVM.instructors.first
+      }
+    }
+  }
 }

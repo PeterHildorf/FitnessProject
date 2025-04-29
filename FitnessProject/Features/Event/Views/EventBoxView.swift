@@ -12,7 +12,6 @@ import FirebaseAuth
 struct EventBoxView: View {
     
     @EnvironmentObject private var eventDataVM: EventDataViewModel
-    @State private var booked = false
     let event: EventModel
     
     let buttonWidth: CGFloat = 45
@@ -31,12 +30,16 @@ struct EventBoxView: View {
     private var isBooked: Bool {
         guard let uid = Auth.auth().currentUser?.uid else { return false }
         return eventDataVM.events
-          .first(where: { $0.id == event.id })?
-          .EventMemembers
-          .contains(uid) ?? false
-      }
-
+            .first(where: { $0.id == event.id })?
+            .EventMemembers
+            .contains(uid) ?? false
+    }
     
+    /// true når arrangementet er fyldt *og* jeg ikke er tilmeldt
+    private var isLocked: Bool {
+        isFull && !isBooked
+    }
+
     private var isFull: Bool {
         memberCount >= event.EventSlots
     }
@@ -69,31 +72,27 @@ struct EventBoxView: View {
             
             Spacer()
             VStack{
-                Button( action: {
-                    //skal opdatere en liste
-                    guard !isFull || isBooked else { return }
-                    booked.toggle()
+                Button {
                     if isBooked {
                         eventDataVM.removeMember(from: event.id.uuidString)
                     } else {
                         eventDataVM.addMember(to: event.id.uuidString)
                     }
-                }) {
-                    Group{
-                        if isFull && !isBooked {
-                            Text("Full")
-                        }
-                        else if isBooked {
+                } label: {
+                    Group {
+                        if isLocked {
+                            Text("Full")                     // 5/5 og *ikke* tilmeldt
+                        } else if isBooked {
                             Image(systemName: "checkmark.circle.fill")
                         } else {
                             Text("Book")
                         }
                     }
                     .frame(minWidth: buttonWidth, minHeight: buttonHeight)
-                    
                 }
                 .buttonStyle(.bordered)
-                .tint(isFull ? .red : .blue)   // rød når fuld, blå ellers
+                .tint(isLocked ? .red : .blue)
+                .disabled(isLocked)
                 Label("\(memberCount)/\(event.EventSlots)", systemImage: "person")
                     .font(.footnote)
                 
@@ -106,17 +105,17 @@ struct EventBoxView: View {
 
 
 /*
-struct EventBoxView_Previews: PreviewProvider {
-    static var previews: some View {
-        // Opret en preview-instans af EventDataViewModel og seed med sampleData
-        let previewVM = EventDataViewModel()
-        previewVM.events = EventModel.sampleData
-        
-        return EventBoxView(event: previewVM.events[0])
-            .environmentObject(previewVM)
-            .padding()
-    }
-}
+ struct EventBoxView_Previews: PreviewProvider {
+ static var previews: some View {
+ // Opret en preview-instans af EventDataViewModel og seed med sampleData
+ let previewVM = EventDataViewModel()
+ previewVM.events = EventModel.sampleData
+ 
+ return EventBoxView(event: previewVM.events[0])
+ .environmentObject(previewVM)
+ .padding()
+ }
+ }
  */
 
 

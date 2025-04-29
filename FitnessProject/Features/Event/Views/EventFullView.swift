@@ -4,6 +4,7 @@ struct EventFullView: View {
     let eventID: UUID
     @EnvironmentObject private var eventDataVM: EventDataViewModel
     @StateObject   private var fullVM      = FullViewModel()
+    @EnvironmentObject private var authVM: AuthViewModel          // ← NY
     @Environment(\.dismiss) private var dismiss
 
     /// Hvis event’et ikke findes (f.eks. lige efter slet), vis en tom tilstand og luk
@@ -60,17 +61,21 @@ struct EventFullView: View {
                 .toolbar {
                     // Rediger-knappen
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        NavigationLink("Rediger") {
-                            EditEventView(eventID: eventID)
+                        if authVM.currentRole == .instructor {
+                            NavigationLink("Rediger") {
+                                EditEventView(eventID: eventID)
+                            }
                         }
                     }
                     // Slet-knappen
                     ToolbarItem(placement: .bottomBar) {
-                        Button("Slet eventet") {
-                            eventDataVM.deleteEvent(event)
-                            dismiss()
+                        if authVM.currentRole == .instructor {
+                            Button("Slet eventet") {
+                                eventDataVM.deleteEvent(event)
+                                dismiss()
+                            }
+                            .foregroundColor(.red)
                         }
-                        .foregroundColor(.red)
                     }
                 }
 

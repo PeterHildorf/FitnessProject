@@ -22,6 +22,11 @@
 			path = FitnessProject;
 			sourceTree = "<group>";
 		};
+		5E48FCE72DC1270000E6863D /* FitnessProjectTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FitnessProjectTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +46,7 @@
 		5E356E612D9BDDC0004048FB = {
 			isa = PBXGroup;
 			children = (
+				5E48FCE72DC1270000E6863D /* FitnessProjectTests */,
 				5E356E6C2D9BDDC0004048FB /* FitnessProject */,
 				5E87E23F2DBA5E54009E12E9 /* FitnessProject.app */,
 			);

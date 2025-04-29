@@ -44,12 +44,24 @@ struct FitnessProjectApp: App {
     let persistenceController = PersistenceController.shared
     
     @StateObject var AuthVM = AuthViewModel()
-    @StateObject var eventDataVM = EventDataViewModel()
+    
     var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .environmentObject(AuthVM)
-                .environmentObject(eventDataVM)
+            WindowGroup {
+                if let uid = AuthVM.userSession?.uid {      // -------- Login-gren
+                    ContentView()
+                        .environmentObject(AuthVM)          // 2) Auth ned til alle
+                        .environmentObject(                 // 3) NY EventDataVM pr. uid
+                            EventDataViewModel(
+                                service: GuardedEventService(
+                                    rolePublisher: AuthVM.$currentRole
+                                )
+                            )
+                        )
+                        .id(uid)                            // 4) tving re-build
+                } else {                                    // -------- Logout-gren
+                    GetStartedView()
+                        .environmentObject(AuthVM)
+                }
+            }
         }
     }
-}
