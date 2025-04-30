@@ -19,9 +19,9 @@ class MockFirestoreService: FirestoreServiceProtocol {
                 id: "mock_uid",
                 fullname: "Mock",
                 email: "mock@gmail.com",
-                role: .member,          // enum-værdi direkte
-                createdEvents: [],      // ← tilføj
-                attendingEvents: []     // ← tilføj
+                role: .member,
+                createdEvents: [],
+                attendingEvents: []
             )
         ]
     
