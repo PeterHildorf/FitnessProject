@@ -18,19 +18,13 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         AppCheck.setAppCheckProviderFactory(providerFactory)
         
         FirebaseApp.configure()
-        /*
+        // 🔥 40 MB er default – her sætter vi 100 MB
         var settings = Firestore.firestore().settings
-    
-        // Anvender offline cache via cache settings
-        
+        let bytes = 100 * 1024 * 1024          // Int
         settings.cacheSettings = PersistentCacheSettings(
-            // FirestoreCacheSizeUnlimited er en NSNumber-konstant, der deaktiverer automatisk oprydning
-            sizeBytes: NSNumber(value: FirestoreCacheSizeUnlimited)
+            sizeBytes: NSNumber(value: bytes)  // ← wrap som NSNumber
         )
-        
-        
         Firestore.firestore().settings = settings
-         */
         
         return true
     }
@@ -46,22 +40,22 @@ struct FitnessProjectApp: App {
     @StateObject var AuthVM = AuthViewModel()
     
     var body: some Scene {
-            WindowGroup {
-                if let uid = AuthVM.userSession?.uid {      // -------- Login-gren
-                    ContentView()
-                        .environmentObject(AuthVM)          // 2) Auth ned til alle
-                        .environmentObject(                 // 3) NY EventDataVM pr. uid
-                            EventDataViewModel(
-                                service: GuardedEventService(
-                                    rolePublisher: AuthVM.$currentRole
-                                )
+        WindowGroup {
+            if let uid = AuthVM.userSession?.uid {      // -------- Login-gren
+                ContentView()
+                    .environmentObject(AuthVM)          // 2) Auth ned til alle
+                    .environmentObject(                 // 3) NY EventDataVM pr. uid
+                        EventDataViewModel(
+                            service: GuardedEventService(
+                                rolePublisher: AuthVM.$currentRole
                             )
                         )
-                        .id(uid)                            // 4) tving re-build
-                } else {                                    // -------- Logout-gren
-                    GetStartedView()
-                        .environmentObject(AuthVM)
-                }
+                    )
+                    .id(uid)                            // 4) tving re-build
+            } else {                                    // -------- Logout-gren
+                GetStartedView()
+                    .environmentObject(AuthVM)
             }
         }
     }
+}

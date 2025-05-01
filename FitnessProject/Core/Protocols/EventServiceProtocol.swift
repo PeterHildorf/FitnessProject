@@ -10,8 +10,11 @@ import FirebaseAuth
 
 protocol EventServiceProtocol {
     // Definere at der kan komme events og instructors fra protocollen
+    
     var eventsPublisher: AnyPublisher<[EventModel], Never> { get }
     var instructorsPublisher: AnyPublisher<[User], Never> { get }
+    var errorPublisher: AnyPublisher<String, Never> { get }      
+
     
     func createEvent(
         title: String,

@@ -11,6 +11,8 @@ final class GuardedEventService: EventServiceProtocol {
     private let inner: EventServiceProtocol
     private var currentRole: UserRole = .member
     private var cancellable: AnyCancellable?
+    var errorPublisher: AnyPublisher<String, Never> { inner.errorPublisher }
+
 
     // MARK: - Init
     init(

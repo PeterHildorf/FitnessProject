@@ -14,12 +14,14 @@ class EventDataViewModel: ObservableObject {
     // MARK: - Public published state
     @Published var events: [EventModel] = []
     @Published var instructors: [User] = []
-    
+    @Published var lastError: String?
+
     
     @State private var booked = false
     
     private var cancellables = Set<AnyCancellable>()
     private let service: EventServiceProtocol
+    
 
     init(service: EventServiceProtocol = FirestoreEventService()) {
         self.service = service
@@ -33,6 +35,12 @@ class EventDataViewModel: ObservableObject {
           .receive(on: DispatchQueue.main)
           .assign(to: \.instructors, on: self)
           .store(in: &cancellables)
+        
+        service.errorPublisher
+            .map { Optional($0) }                 // String  →  String?
+            .receive(on: DispatchQueue.main)
+            .assign(to: \.lastError, on: self)
+            .store(in: &cancellables)
       }
     
     // Delegér alt til servicen
