@@ -88,7 +88,7 @@ class AuthViewModel: ObservableObject {
             switch self {
             case .custom(let error):
                 return error.localizedDescription
-            case .firestore(let message):
+            case .firestore(_):
                 return "Something went wrong!"
             }
         }
