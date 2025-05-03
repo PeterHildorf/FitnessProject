@@ -21,8 +21,6 @@ final class AuthenticationTest: XCTestCase {
     
     override func tearDown() {
         viewModel = nil
-        mockAuthService = MockAuthService()
-        mockFirestoreService = MockFirestoreService()
         super.tearDown()
     }
     
@@ -63,7 +61,7 @@ final class AuthenticationTest: XCTestCase {
         
         XCTAssertEqual(viewModel.userSession?.uid, "new_mock_uid")
         XCTAssertEqual(viewModel.currentUser?.email, email)
-        XCTAssertEqual(viewModel.currentUser?.role, role)
+        XCTAssertEqual(viewModel.currentUser?.role, UserRole.instructor)
         XCTAssertEqual(viewModel.currentUser?.fullname, fullname)
     }
     

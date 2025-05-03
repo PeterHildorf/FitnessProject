@@ -44,7 +44,7 @@ struct EditEventView: View {
                     EventDescription: description
                 )
                 eventDataVM.updateEvent(updated)
-                dismiss()
+                //dismiss()
             }
           } else {
             ProgressView("Henter event…")
