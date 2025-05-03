@@ -5,13 +5,27 @@
 //  Created by Wame Gassama on 14/04/2025.
 //
 
-import SwiftUI
+import Foundation
 
-struct User: Identifiable, Codable {
+enum UserRole: String, Codable {
+    case instructor
+    case member
+}
+
+typealias EventID = String
+
+
+struct User: Identifiable, Codable, Hashable {
     let id: String
     let fullname: String
     let email: String
-    let role: String
+    var role: UserRole
+
+    // Listen af event-IDs, som instructoren har oprettet
+    var createdEvents: [EventID]
+
+    // Listen af event-IDs, som medlemmet har tilmeldt sig
+    var attendingEvents: [EventID]
     
     var initials: String {
         let formatter = PersonNameComponentsFormatter()
