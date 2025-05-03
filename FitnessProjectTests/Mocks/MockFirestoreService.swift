@@ -1,11 +1,4 @@
 //
-//  Untitled.swift
-//  FitnessProject
-//
-//  Created by Peter Hannibal Hildorf on 29/04/2025.
-//
-
-//
 //  MockFirestoreService.swift
 //  FitnessProject
 //
