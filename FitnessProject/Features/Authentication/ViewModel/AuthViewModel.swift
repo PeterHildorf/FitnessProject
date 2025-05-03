@@ -15,12 +15,18 @@ class AuthViewModel: ObservableObject {
     @Published var userSession: UserProtocol?
     @Published var currentUser: User?
     @Published var seletedType: String = "Member"
+    @Published var currentRole: UserRole = .member
     @Published var error: Validation?
     @Published var hasError: Bool = false
     
     private let authService: AuthServiceProtocol
     private let firestoreService: FirestoreServiceProtocol
     private let validator = CreateValidator()
+    
+    // setting role to define the rules so the user have different options that depens on role
+    private func setRole(from user: User?) {
+        currentRole = user?.role ?? .member
+    }
     
     init(authService: AuthServiceProtocol = AuthService(), firestoreService: FirestoreServiceProtocol = FirestoreService()) {
         //Injecting the Firebase services into the view model
@@ -40,6 +46,7 @@ class AuthViewModel: ObservableObject {
             let result = try await authService.signIn(email, password)
             self.userSession = result
             self.currentUser = await firestoreService.fetchUser(id: result.uid)
+            self.currentRole = self.currentUser?.role ?? .member
         } catch {
             self.error = .custom(.authFailed)
             self.hasError = true
@@ -51,9 +58,13 @@ class AuthViewModel: ObservableObject {
             try validator.validate(email, password)
             let result = try await authService.createNewUser(email, password)
             self.userSession = result
-            let user = User(id: result.uid, fullname: fullname, email: email, role: role)
+            let roleEnum = UserRole(rawValue: role.lowercased()) ?? .member
+            let user = User(id: result.uid, fullname: fullname, email: email, role: roleEnum, createdEvents: [], attendingEvents:  [])
+            
             try await firestoreService.saveUser(user: user)
             await fetchUser()
+            self.currentRole = roleEnum
+            
         } catch let error as CreateValidator.CreateValidatorError {
             self.error = .custom(error)
             self.hasError = true
@@ -67,6 +78,7 @@ class AuthViewModel: ObservableObject {
         authService.signOut()
         self.userSession = nil
         self.currentUser = nil
+        self.currentRole = .member                                    
     }
     
     func fetchUser() async {
@@ -75,8 +87,11 @@ class AuthViewModel: ObservableObject {
         if id != nil {
             let user = await firestoreService.fetchUser(id: id!)
             self.currentUser = user
+            self.currentRole = user?.role ?? .member
+
         } else {
             self.currentUser = nil
+            self.currentRole = .member
         }
     }
     

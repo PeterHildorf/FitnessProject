@@ -13,7 +13,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		D1C2BCDE2DBCE33300F7646A /* PBXContainerItemProxy */ = {
+		5E48FD5F2DC2276F00E6863D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5E356E622D9BDDC0004048FB /* Project object */;
 			proxyType = 1;
@@ -23,8 +23,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		5E356E6A2D9BDDC0004048FB /* FitnessProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FitnessProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D1C2BCDA2DBCE33300F7646A /* FitnessProjectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FitnessProjectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E48FD5B2DC2276F00E6863D /* FitnessProjectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FitnessProjectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E87E23F2DBA5E54009E12E9 /* FitnessProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FitnessProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -33,7 +33,7 @@
 			path = FitnessProject;
 			sourceTree = "<group>";
 		};
-		D1C2BCDB2DBCE33300F7646A /* FitnessProjectTests */ = {
+		5E48FD5C2DC2276F00E6863D /* FitnessProjectTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = FitnessProjectTests;
 			sourceTree = "<group>";
@@ -51,7 +51,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D1C2BCD72DBCE33300F7646A /* Frameworks */ = {
+		5E48FD582DC2276F00E6863D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -65,18 +65,10 @@
 			isa = PBXGroup;
 			children = (
 				5E356E6C2D9BDDC0004048FB /* FitnessProject */,
-				D1C2BCDB2DBCE33300F7646A /* FitnessProjectTests */,
-				5E356E6B2D9BDDC0004048FB /* Products */,
+				5E87E23F2DBA5E54009E12E9 /* FitnessProject.app */,
+				5E48FD5B2DC2276F00E6863D /* FitnessProjectTests.xctest */,
+				5E48FD5C2DC2276F00E6863D /* FitnessProjectTests */,
 			);
-			sourceTree = "<group>";
-		};
-		5E356E6B2D9BDDC0004048FB /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				5E356E6A2D9BDDC0004048FB /* FitnessProject.app */,
-				D1C2BCDA2DBCE33300F7646A /* FitnessProjectTests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -104,30 +96,30 @@
 				D16A6D452DB7FEA20078D972 /* FirebaseFirestore */,
 			);
 			productName = FitnessProject;
-			productReference = 5E356E6A2D9BDDC0004048FB /* FitnessProject.app */;
+			productReference = 5E87E23F2DBA5E54009E12E9 /* FitnessProject.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D1C2BCD92DBCE33300F7646A /* FitnessProjectTests */ = {
+		5E48FD5A2DC2276F00E6863D /* FitnessProjectTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D1C2BCE02DBCE33300F7646A /* Build configuration list for PBXNativeTarget "FitnessProjectTests" */;
+			buildConfigurationList = 5E48FD612DC2276F00E6863D /* Build configuration list for PBXNativeTarget "FitnessProjectTests" */;
 			buildPhases = (
-				D1C2BCD62DBCE33300F7646A /* Sources */,
-				D1C2BCD72DBCE33300F7646A /* Frameworks */,
-				D1C2BCD82DBCE33300F7646A /* Resources */,
+				5E48FD572DC2276F00E6863D /* Sources */,
+				5E48FD582DC2276F00E6863D /* Frameworks */,
+				5E48FD592DC2276F00E6863D /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				D1C2BCDF2DBCE33300F7646A /* PBXTargetDependency */,
+				5E48FD602DC2276F00E6863D /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				D1C2BCDB2DBCE33300F7646A /* FitnessProjectTests */,
+				5E48FD5C2DC2276F00E6863D /* FitnessProjectTests */,
 			);
 			name = FitnessProjectTests;
 			packageProductDependencies = (
 			);
 			productName = FitnessProjectTests;
-			productReference = D1C2BCDA2DBCE33300F7646A /* FitnessProjectTests.xctest */;
+			productReference = 5E48FD5B2DC2276F00E6863D /* FitnessProjectTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -143,7 +135,7 @@
 					5E356E692D9BDDC0004048FB = {
 						CreatedOnToolsVersion = 16.2;
 					};
-					D1C2BCD92DBCE33300F7646A = {
+					5E48FD5A2DC2276F00E6863D = {
 						CreatedOnToolsVersion = 16.3;
 						TestTargetID = 5E356E692D9BDDC0004048FB;
 					};
@@ -162,12 +154,12 @@
 				D16A6D402DB7FEA20078D972 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 5E356E6B2D9BDDC0004048FB /* Products */;
+			productRefGroup = 5E356E612D9BDDC0004048FB;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				5E356E692D9BDDC0004048FB /* FitnessProject */,
-				D1C2BCD92DBCE33300F7646A /* FitnessProjectTests */,
+				5E48FD5A2DC2276F00E6863D /* FitnessProjectTests */,
 			);
 		};
 /* End PBXProject section */
@@ -180,7 +172,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D1C2BCD82DBCE33300F7646A /* Resources */ = {
+		5E48FD592DC2276F00E6863D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -197,7 +189,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D1C2BCD62DBCE33300F7646A /* Sources */ = {
+		5E48FD572DC2276F00E6863D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -207,10 +199,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		D1C2BCDF2DBCE33300F7646A /* PBXTargetDependency */ = {
+		5E48FD602DC2276F00E6863D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 5E356E692D9BDDC0004048FB /* FitnessProject */;
-			targetProxy = D1C2BCDE2DBCE33300F7646A /* PBXContainerItemProxy */;
+			targetProxy = 5E48FD5F2DC2276F00E6863D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -337,12 +329,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"FitnessProject/Preview Content\"";
-				DEVELOPMENT_TEAM = TS97MSNQN4;
+				DEVELOPMENT_TEAM = 6C92V3747H;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -363,6 +356,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dtu.Project.FitnessProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -378,12 +372,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"FitnessProject/Preview Content\"";
-				DEVELOPMENT_TEAM = TS97MSNQN4;
+				DEVELOPMENT_TEAM = 6C92V3747H;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -404,6 +399,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dtu.Project.FitnessProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -413,17 +409,17 @@
 			};
 			name = Release;
 		};
-		D1C2BCE12DBCE33300F7646A /* Debug */ = {
+		5E48FD622DC2276F00E6863D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = TS97MSNQN4;
+				DEVELOPMENT_TEAM = 6C92V3747H;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = DTU.FitnessProjectTests;
+				PRODUCT_BUNDLE_IDENTIFIER = dtu.Project.FitnessProjectTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -433,17 +429,17 @@
 			};
 			name = Debug;
 		};
-		D1C2BCE22DBCE33300F7646A /* Release */ = {
+		5E48FD632DC2276F00E6863D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = TS97MSNQN4;
+				DEVELOPMENT_TEAM = 6C92V3747H;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = DTU.FitnessProjectTests;
+				PRODUCT_BUNDLE_IDENTIFIER = dtu.Project.FitnessProjectTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -475,11 +471,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D1C2BCE02DBCE33300F7646A /* Build configuration list for PBXNativeTarget "FitnessProjectTests" */ = {
+		5E48FD612DC2276F00E6863D /* Build configuration list for PBXNativeTarget "FitnessProjectTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D1C2BCE12DBCE33300F7646A /* Debug */,
-				D1C2BCE22DBCE33300F7646A /* Release */,
+				5E48FD622DC2276F00E6863D /* Debug */,
+				5E48FD632DC2276F00E6863D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

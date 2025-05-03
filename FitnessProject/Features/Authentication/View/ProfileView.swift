@@ -38,12 +38,12 @@ struct ProfileView: View {
                     HStack {
                         SettingsRowView(imageName: "person.fill", title: "Role", tintColor: .gray)
                         Spacer()
-                        Text(user.role)
+                        Text(user.role.rawValue.capitalized)
                             .font(.subheadline)
                             .foregroundColor(.white)
                             .padding(.horizontal, 10)
                             .padding(.vertical, 5)
-                            .background(user.role ==  "Member" ? .blue : .green)
+                            .background(user.role.rawValue.capitalized ==  "Member" ? .blue : .green)
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                     }
                 }
