@@ -49,14 +49,19 @@ struct EventFullView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding()
 
-                        Divider()
-
+                        
                         Text(event.EventDescription)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding()
+                            .padding(8)
+                            .multilineTextAlignment(.leading)
+                            .frame(maxWidth: .infinity, minHeight: 120, alignment: .topLeading)
+                            .background(Color.white)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.blue, lineWidth: 1)
+                            )
+                            .padding(.horizontal)
                     }
                 }
-                .navigationTitle(event.EventTitle)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     // Rediger-knappen
