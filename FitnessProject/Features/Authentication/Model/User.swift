@@ -24,7 +24,7 @@ struct User: Identifiable, Codable, Hashable {
     // Listen af event-IDs, som instructoren har oprettet
     var createdEvents: [EventID]
 
-    // Listen af event-IDs, som medlemmet har tilmeldt sig
+    // Listen af event-IDs, som useren har tilmeldt sig
     var attendingEvents: [EventID]
     
     var initials: String {

@@ -17,12 +17,11 @@ struct EventBoxView: View {
     let buttonWidth: CGFloat = 45
     let buttonHeight: CGFloat = 25
     
-    // Læser altid live fra din EventDataViewModel.events-liste
+    // Læser altid live fra EventDataViewModel.events-liste
     private var memberCount: Int {
         if let idx = eventDataVM.events.firstIndex(where: { $0.id == event.id }) {
             return eventDataVM.events[idx].EventMemembers.count
         } else {
-            // Fald tilbage på det event-objekt, du fik sendt ind
             return event.EventMemembers.count
         }
     }
@@ -35,7 +34,7 @@ struct EventBoxView: View {
             .contains(uid) ?? false
     }
     
-    /// true når arrangementet er fyldt *og* jeg ikke er tilmeldt
+    /// true når arrangementet er fyldt *og* man ikke er tilmeldt
     private var isLocked: Bool {
         isFull && !isBooked
     }

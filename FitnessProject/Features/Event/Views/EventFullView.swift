@@ -4,10 +4,9 @@ struct EventFullView: View {
     let eventID: UUID
     @EnvironmentObject private var eventDataVM: EventDataViewModel
     @StateObject   private var fullVM      = FullViewModel()
-    @EnvironmentObject private var authVM: AuthViewModel          // ← NY
+    @EnvironmentObject private var authVM: AuthViewModel         
     @Environment(\.dismiss) private var dismiss
 
-    /// Hvis event’et ikke findes (f.eks. lige efter slet), vis en tom tilstand og luk
     private var event: EventModel? {
         eventDataVM.events.first { $0.id == eventID }
     }

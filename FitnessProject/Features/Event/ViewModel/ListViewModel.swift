@@ -93,16 +93,11 @@ class ListViewModel: ObservableObject {
         var currentDate = startOfCurrentWeek
         
         while currentDate <= endOfYear {
-            // 1. Mulighed: Få “startOfDay” i DK-tid
+
             let localStartOfDay = calendar.startOfDay(for: currentDate)
             days.append(localStartOfDay)
             
-            // 2. (Alternativ) Sæt dem til kl. 12:00 – for at være “sikker” på at vi
-            // havner midt på dagen uden risiko for sommertidskift.
-            // let localMidDay = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: currentDate)!
-            // days.append(localMidDay)
             
-            // Gå en dag frem
             guard let nextDay = calendar.date(byAdding: .day, value: 1, to: currentDate) else {
                 break
             }

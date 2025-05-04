@@ -1,7 +1,5 @@
 import SwiftUI
 
-/// Genbrugelig form til både oprettelse og redigering.
-/// Du binder direkte dine @State‑felter ind med Binding.
 struct EventFormView: View {
     @EnvironmentObject var eventVM: EventDataViewModel
     @EnvironmentObject var authVM: AuthViewModel
@@ -34,11 +32,11 @@ struct EventFormView: View {
                     ForEach(types, id: \.self) { Text($0).tag($0) }
                 }
                 .pickerStyle(.menu)
-                .frame(maxWidth: .infinity, minHeight: 50)         // fylder bredt og har minimumshøjde
+                .frame(maxWidth: .infinity, minHeight: 50)
                 .padding(.horizontal, 16)
                 .background(
                     RoundedRectangle(cornerRadius: 8)
-                        .fill(Color(.blue))                 // lys grå baggrund
+                        .fill(Color(.blue))
                 )
                 .tint(.white)
                 Image(title)
@@ -69,11 +67,11 @@ struct EventFormView: View {
                         }
                     }
                     .pickerStyle(.menu)
-                    .frame(maxWidth: .infinity, minHeight: 50)         // fylder bredt og har minimumshøjde
+                    .frame(maxWidth: .infinity, minHeight: 50)
                     .padding(.horizontal, 16)
                     .background(
                         RoundedRectangle(cornerRadius: 8)
-                            .fill(Color(.blue))                 // lys grå baggrund
+                            .fill(Color(.blue))
                     )
                     .tint(.white)
                 } else {
@@ -142,9 +140,8 @@ struct EventFormView: View {
 
 
 
-// Håndter underlinet textfield style
 struct UnderlinedTextFieldStyle: TextFieldStyle {
-    var lineColor: Color  // nu kan vi selv vælge farven
+    var lineColor: Color
 
     func _body(configuration: TextField<Self._Label>) -> some View {
         configuration
@@ -160,7 +157,6 @@ struct UnderlinedTextFieldStyle: TextFieldStyle {
 }
 
 
-// Håndter outline style for TextEditor
 struct OutlinedTextEditorStyle: ViewModifier {
     var lineColor: Color
     func body(content: Content) -> some View {
@@ -173,7 +169,6 @@ struct OutlinedTextEditorStyle: ViewModifier {
     }
 }
 
-// Extension for nem brug af OutlinedTextEditorStyle
 extension View {
     func outlinedTextEditorStyle(lineColor: Color = .blue) -> some View {
         self.modifier(OutlinedTextEditorStyle(lineColor: lineColor))

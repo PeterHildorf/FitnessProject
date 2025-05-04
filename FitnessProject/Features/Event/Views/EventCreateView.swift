@@ -13,7 +13,7 @@ struct EventCreateView: View {
 
   @State private var title           = "Fitness"
   @State private var duration        = 30
-  @State private var selectedTrainer: User? = nil   // <-- skal være optional
+  @State private var selectedTrainer: User? = nil 
   @State private var location        = ""
   @State private var slots           = 10
   @State private var date            = Date()

@@ -60,7 +60,7 @@ class FirestoreEventService: EventServiceProtocol {
             }
     }
     
-    // MARK: - CRUD
+    // CRUD
     
     func createEvent(
         title: String,
@@ -90,6 +90,7 @@ class FirestoreEventService: EventServiceProtocol {
         let eventRef = db.collection(eventsCol).document(docId)
         let trainerRef = db.collection(usersCol).document(trainerID)
         
+        //Avender batch for håndtering af errors hvis firebase fejler/og når brugeren er offline
         let batch = db.batch()
         
         batch.setData(new.dictionary, forDocument: eventRef)
@@ -123,7 +124,7 @@ class FirestoreEventService: EventServiceProtocol {
         let docId = event.id.uuidString
         let eventRef = db.collection(eventsCol).document(docId)
         
-        //anvender batch igen for offline management (merge = true, gør at man bevare evt. andre felter)
+        //anvender batch igen for offline management
         batch.setData(event.dictionary, forDocument: eventRef, merge: true)
         
         // sender/comitter batchen
@@ -138,7 +139,7 @@ class FirestoreEventService: EventServiceProtocol {
         guard Auth.auth().currentUser?.uid == event.EventTrainer else { return }
         let docId = event.id.uuidString
         
-        //Offline håndtering, opretter batch for alle de ændringer der skal gøres når funktionen kaldes offline:
+        //Offline håndtering, opretter en batch for alle de ændringer der skal gøres når funktionen kaldes offline:
         let batch = db.batch()
         // fjerner eventet for alle users der var en del af eventet
         for memberID in event.EventMemembers {
@@ -161,10 +162,9 @@ class FirestoreEventService: EventServiceProtocol {
         // skriver til batch
         batch.deleteDocument(eventRef)
         
-        // sender/committer batch hvis en fejl sker i batchen, så går det ud over hele batchen og ingen ændringer sker
+        // sender/committer batch, hvis en fejl sker i batchen, så går det ud over hele batchen og ingen ændringer sker
         batch.commit { [weak self] error in
             if let err = error {
-                // anvender variablen errorSubject, så viewmodellen kan vise fejlen
                 self?.errorSubject.send("Kunne ikke slette eventet: \(err.localizedDescription)")
             }
         }
@@ -177,7 +177,7 @@ class FirestoreEventService: EventServiceProtocol {
         let eRef = db.collection(eventsCol).document(eventID)
         let uRef = db.collection(usersCol).document(uid)
         
-        // 1) læg mig i EventMemembers
+        // 1) user i EventMemembers
         eRef.updateData(["EventMemembers": FieldValue.arrayUnion([uid])]) { [weak self] error in
             if let err = error {
                 // rollback roller antallet tilbage på eventet som det var før

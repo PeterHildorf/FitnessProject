@@ -7,7 +7,7 @@ struct EditEventView: View {
 
     @State private var title             = ""
     @State private var duration          = 30
-    @State private var selectedTrainer: User? = nil    // ← Gør den optional
+    @State private var selectedTrainer: User? = nil
     @State private var location          = ""
     @State private var slots             = 0
     @State private var date              = Date()
@@ -44,7 +44,6 @@ struct EditEventView: View {
                     EventDescription: description
                 )
                 eventDataVM.updateEvent(updated)
-                //dismiss()
             }
           } else {
             ProgressView("Henter event…")
@@ -52,7 +51,6 @@ struct EditEventView: View {
         }
         .navigationTitle("Rediger Event")
         .onAppear {
-            // Populér felterne
             title       = event.EventTitle
             duration    = event.EventDuration
             location    = event.EventLocation
@@ -60,7 +58,7 @@ struct EditEventView: View {
             date        = event.EventDate
             description = event.EventDescription
 
-            // Find og sæt selectedTrainer når dine instructors er hentet
+            
             if selectedTrainer == nil {
                 selectedTrainer = eventDataVM.instructors
                     .first(where: { $0.id == event.EventTrainer })

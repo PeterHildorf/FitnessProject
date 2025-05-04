@@ -7,14 +7,12 @@ import Combine
 
 final class GuardedEventService: EventServiceProtocol {
 
-    // MARK: - Private state
     private let inner: EventServiceProtocol
     private var currentRole: UserRole = .member
     private var cancellable: AnyCancellable?
     var errorPublisher: AnyPublisher<String, Never> { inner.errorPublisher }
 
 
-    // MARK: - Init
     init(
         inner: EventServiceProtocol = FirestoreEventService(),
         rolePublisher: Published<UserRole>.Publisher
@@ -25,11 +23,11 @@ final class GuardedEventService: EventServiceProtocol {
             .sink { [weak self] role in self?.currentRole = role }
     }
 
-    // MARK: - Public publishers
+    // Public publishers
     var eventsPublisher: AnyPublisher<[EventModel], Never>       { inner.eventsPublisher }
     var instructorsPublisher: AnyPublisher<[User], Never>        { inner.instructorsPublisher }
 
-    // MARK: - CRUD med rolle-checks
+    // CRUD med rolle-checks
     func createEvent(
         title: String,
         duration: Int,

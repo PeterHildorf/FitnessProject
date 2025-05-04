@@ -45,7 +45,6 @@ struct EventModel: Identifiable, Hashable {
 }
 
 extension EventModel {
-    /// Gør modellen klar til at gemme i Firestore
     var dictionary: [String: Any] {
         return [
             "EventTitle":     EventTitle,
@@ -62,7 +61,6 @@ extension EventModel {
         ]
     }
     
-    /// Initialiser fra Firestore-data + dokument-ID
     init?(from dict: [String: Any], id: String) {
         guard
             let title    = dict["EventTitle"]     as? String,

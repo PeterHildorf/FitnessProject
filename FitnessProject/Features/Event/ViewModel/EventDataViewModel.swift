@@ -11,7 +11,6 @@ import SwiftUI
 
 
 class EventDataViewModel: ObservableObject {
-    // MARK: - Public published state
     @Published var events: [EventModel] = []
     @Published var instructors: [User] = []
     @Published var lastError: String?
@@ -37,13 +36,12 @@ class EventDataViewModel: ObservableObject {
           .store(in: &cancellables)
         
         service.errorPublisher
-            .map { Optional($0) }                 // String  →  String?
+            .map { Optional($0) }                 // String til String?
             .receive(on: DispatchQueue.main)
             .assign(to: \.lastError, on: self)
             .store(in: &cancellables)
       }
     
-    // Delegér alt til servicen
       func createEvent(
         title: String,
         duration: Int,
