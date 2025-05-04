@@ -60,7 +60,7 @@ struct EventBoxView: View {
                 
             }
             Spacer()
-            VStack(alignment: .leading) {
+            VStack(alignment: .trailing) {
                 
                 Text(event.EventTitle)
                     .bold()
@@ -81,7 +81,7 @@ struct EventBoxView: View {
                 } label: {
                     Group {
                         if isLocked {
-                            Text("Full")                     // 5/5 og *ikke* tilmeldt
+                            Text("Full")
                         } else if isBooked {
                             Image(systemName: "checkmark.circle.fill")
                         } else {
@@ -102,20 +102,5 @@ struct EventBoxView: View {
         
     }
 }
-
-
-/*
- struct EventBoxView_Previews: PreviewProvider {
- static var previews: some View {
- // Opret en preview-instans af EventDataViewModel og seed med sampleData
- let previewVM = EventDataViewModel()
- previewVM.events = EventModel.sampleData
- 
- return EventBoxView(event: previewVM.events[0])
- .environmentObject(previewVM)
- .padding()
- }
- }
- */
 
 

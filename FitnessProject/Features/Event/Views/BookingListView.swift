@@ -11,9 +11,9 @@ import Foundation
 struct BookingListView: View {
     
     @StateObject var viewModel: ListViewModel
-    @EnvironmentObject var eventDataVM: EventDataViewModel  // ← tilføj
-    @EnvironmentObject private var authVM: AuthViewModel          // ← NY
-
+    @EnvironmentObject var eventDataVM: EventDataViewModel
+    @EnvironmentObject private var authVM: AuthViewModel
+    
     
     var body: some View {
         NavigationStack {
@@ -44,29 +44,33 @@ struct BookingListView: View {
                 }
                 
                 Divider()
+                    .background(Color.blue)
                 
                 // Liste over events
                 ScrollView {
                     let eventsForDate = eventDataVM.events
                         .filter { Calendar.current.isDate($0.EventDate, inSameDayAs: viewModel.selectedDate) }
                         .sorted { $0.EventDate < $1.EventDate }
-                    
+                    //henter events ned udfra dato, så det sorteret
                     ForEach(eventsForDate) { event in
                         NavigationLink(value: event) {
-                            // Kun event med
                             EventBoxView(event: event)
                         }
                         .tint(.black)
                     }
                 }
                 .navigationDestination(for: EventModel.self) { event in
-                    // Destination henter altid selv den seneste data fra miljøet
                     EventFullView(eventID: event.id)
                 }
                 if authVM.currentRole == .instructor {
                     NavigationLink("＋") {
                         EventCreateView()
                     }
+                    .font(.system(size: 40, weight: .bold))
+                    .padding(8)
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(12)
                 }
             }
         }
@@ -90,25 +94,3 @@ struct BookingListView: View {
 
 
 
-
-/*
- // Preview
- struct BookingListView_Previews: PreviewProvider {
- static var previews: some View {
- // Opret og seed EventDataViewModel med sampleData
- let eventDataVM = EventDataViewModel()
- eventDataVM.events = EventModel.sampleData
- 
- // Opret ListViewModel
- let listVM = ListViewModel(
- data: eventDataVM,
- year: Calendar.current.component(.year, from: Date())
- )
- 
- return NavigationStack {
- BookingListView(viewModel: listVM)
- .environmentObject(eventDataVM)
- }
- }
- }
- */
