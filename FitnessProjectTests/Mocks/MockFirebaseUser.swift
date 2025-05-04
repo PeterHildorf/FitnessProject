@@ -14,5 +14,3 @@ class MockFirebaseUser: UserProtocol {
         self.uid = uid
     }
 }
-
-

@@ -1,3 +1,9 @@
+//
+//  UserProtocol.swift
+//  FitnessProject
+//
+//  Created by Wame Gassama on 26/04/2025.
+//
 
 import FirebaseAuth
 

@@ -2,7 +2,7 @@
 //  AuthServiceProtocol.swift
 //  FitnessProject
 //
-//  Created by Peter Hannibal Hildorf on 29/04/2025.
+//  Created by Wame Gassama on 26/04/2025.
 //
 
 import FirebaseAuth
@@ -14,5 +14,4 @@ protocol AuthServiceProtocol {
     func createNewUser(_ email: String,_ password: String) async throws -> UserProtocol
     func signOut()
     func getCurrentUserById() -> String?
-    
 }

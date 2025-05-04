@@ -22,6 +22,7 @@ class AuthViewModel: ObservableObject {
     private let authService: AuthServiceProtocol
     private let firestoreService: FirestoreServiceProtocol
     private let validator = CreateValidator()
+    
     // setting role to define the rules so the user have different options that depens on role
     private func setRole(from user: User?) {
         currentRole = user?.role ?? .member
@@ -102,7 +103,7 @@ class AuthViewModel: ObservableObject {
             switch self {
             case .custom(let error):
                 return error.localizedDescription
-            case .firestore(let message):
+            case .firestore(_):
                 return "Something went wrong!"
             }
         }
