@@ -276,6 +276,9 @@ final class EventTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
     
+    
+    // MARK: - Helpers
+    
     func eventNotFound(
         when performingForEventModel: ((_ event: EventModel) -> Void)? = nil,
         when performingForEventID: ((_ id: String) -> Void)? = nil,
