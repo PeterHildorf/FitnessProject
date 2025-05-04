@@ -12,123 +12,58 @@ import Combine
 
 final class EventTests: XCTestCase {
     private var viewModel: EventDataViewModel!
-    private var mockEventService: MockEventService = MockEventService()
+    private var mockEventService: MockEventService!
     private var cancellables: Set<AnyCancellable> = []
 
     override func setUp() {
         super.setUp()
+        mockEventService = MockEventService()
         viewModel = EventDataViewModel(service: mockEventService)
     }
     
     override func tearDown() {
         viewModel = nil
+        mockEventService = nil
         super.tearDown()
     }
     
-    func testCreateEventSuccess() {
+    func testCreateEvent() {
         let expectation = XCTestExpectation()
-
-        let title = "Yoga"
-        let duration = 60
-        let trainerID = "trainer123"
-        let trainerName = "Jane"
-        let location = "Room A"
-        let members: [String] = []
-        let slots = 10
-        let date = Date()
-        let picture = "yoga.png"
-        let description = "A relaxing yoga session."
-        
+        let event = createMockEvent()
 
         viewModel.$events
             .dropFirst()
             .sink { events in
                 if let first = events.first {
                     XCTAssertEqual(events.count, 1)
-                    XCTAssertEqual(first.EventTitle, title)
-                    XCTAssertEqual(first.EventDuration, duration)
-                    XCTAssertEqual(first.EventTrainer, trainerID)
-                    XCTAssertEqual(first.EventTrainerName, trainerName)
-                    XCTAssertEqual(first.EventLocation, location)
-                    XCTAssertEqual(first.EventMemembers, members)
-                    XCTAssertEqual(first.EventSlots, slots)
-                    XCTAssertEqual(first.EventDate, date)
-                    XCTAssertEqual(first.EventPicture, picture)
-                    XCTAssertEqual(first.EventDescription, description)
+                    XCTAssertEqual(first.EventTitle, event.EventTitle)
+                    XCTAssertEqual(first.EventDuration, event.EventDuration)
+                    XCTAssertEqual(first.EventTrainer, event.EventTrainer)
+                    XCTAssertEqual(first.EventTrainerName, event.EventTrainerName)
+                    XCTAssertEqual(first.EventLocation, event.EventLocation)
+                    XCTAssertEqual(first.EventMemembers, event.EventMemembers)
+                    XCTAssertEqual(first.EventSlots, event.EventSlots)
+                    XCTAssertEqual(first.EventDate, event.EventDate)
+                    XCTAssertEqual(first.EventPicture, event.EventPicture)
+                    XCTAssertEqual(first.EventDescription, event.EventDescription)
                     expectation.fulfill()
                 }
             }
             .store(in: &cancellables)
-        
-        viewModel.createEvent(
-            title: title,
-            duration: 60,
-            trainerID: "trainer123",
-            trainerName: "Jane",
-            location: "Room A",
-            members: [],
-            slots: 10,
-            date: date,
-            picture: "yoga.png",
-            description: "A relaxing yoga session."
-        )
 
         wait(for: [expectation], timeout: 1.0)
     }
     
     func testUpdateEventByAuthorizedUser() {
-        let expectation = XCTestExpectation()
+        let expectation = XCTestExpectation(description: "Forventer at eventet opdateres")
 
-        let originalEvent = EventModel(
-            EventTitle: "Pilates",
-            EventDuration: 60,
-            EventTrainer: "mock_uid",
-            EventTrainerName: "Jane",
-            EventLocation: "DTU Lyngby",
-            EventMemembers: [],
-            EventSlots: 10,
-            EventDate: Date(),
-            EventPicture: "pilates.png",
-            EventDescription: "Velkommen til pilates holdet!"
-        )
-
-        mockEventService.mockCurrentUser = User(
-            id: "mock_uid",
-            fullname: "Mock",
-            email: "Mock@gmail.com",
-            role: .instructor,
-            createdEvents: [],
-            attendingEvents: [])
+        let currentUser = createMockUser()
         
-        // Create the event
-        mockEventService.createEvent(
-            title: originalEvent.EventTitle,
-            duration: originalEvent.EventDuration,
-            trainerID: originalEvent.EventTrainer,
-            trainerName: originalEvent.EventTrainerName,
-            location: originalEvent.EventLocation,
-            members: originalEvent.EventMemembers,
-            slots: originalEvent.EventSlots,
-            date: originalEvent.EventDate,
-            picture: originalEvent.EventPicture,
-            description: originalEvent.EventDescription
-        )
+        let originalEvent = createMockEvent(EventTrainer: currentUser.id)
 
-        // Observe the events after creation and update
-        viewModel.$events
-            .dropFirst(3)
-            .sink { events in
-                if let updatedEvent = events.first {
-                    XCTAssertEqual(updatedEvent.EventTitle, "Updated Title")
-                    expectation.fulfill()
-                }
-            }
-            .store(in: &cancellables)
-        
-        // Update the event
         let updatedEvent = EventModel(
-            id: mockEventService.lastCreatedEvent!.id,
-            EventTitle: "Updated Title",
+            id: originalEvent.id,
+            EventTitle: "Opdateret Title",
             EventDuration: originalEvent.EventDuration,
             EventTrainer: originalEvent.EventTrainer,
             EventTrainerName: originalEvent.EventTrainerName,
@@ -139,101 +74,165 @@ final class EventTests: XCTestCase {
             EventPicture: originalEvent.EventPicture,
             EventDescription: originalEvent.EventDescription
         )
-
+        
         // Perform the update
         viewModel.updateEvent(updatedEvent)
+        
+        viewModel.$events
+            .dropFirst(3)
+            .sink { events in
+                if let updatedEvent = events.first {
+                    XCTAssertEqual(updatedEvent.EventTitle, "Opdateret Title")
+                    expectation.fulfill()
+                }
+            }
+            .store(in: &cancellables)
         
         // Wait for the expectation to be fulfilled
         wait(for: [expectation], timeout: 1.0)
     }
+    
+    func testUpdateEventByUnauthorizedUser() {
+        let expectation = XCTestExpectation(description: "Forventer at man ikke kan opdateret en event")
+        
+        createMockUser()
+        
+        let originalEvent = createMockEvent(EventTrainer: "wrongUserId")
+        
+        let updatedEvent = EventModel(
+            id: originalEvent.id,
+            EventTitle: "Opdateret Title",
+            EventDuration: originalEvent.EventDuration,
+            EventTrainer: originalEvent.EventTrainer,
+            EventTrainerName: originalEvent.EventTrainerName,
+            EventLocation: originalEvent.EventLocation,
+            EventMemembers: originalEvent.EventMemembers,
+            EventSlots: originalEvent.EventSlots,
+            EventDate: originalEvent.EventDate,
+            EventPicture: originalEvent.EventPicture,
+            EventDescription: originalEvent.EventDescription
+        )
+        
+        viewModel.updateEvent(updatedEvent)
+        
+        viewModel.$lastError
+            .dropFirst()
+            .sink { error in
+                if let error = error {
+                    XCTAssertEqual(error.description, "❌ Du har ikke tilladelse til at opdatere dette event.")
+                    expectation.fulfill()
+                }
+            }
+            .store(in: &cancellables)
+        
+        wait(for: [expectation], timeout: 1.0)
+    }
+    
+    func testEventNotFoundForUpdateEvent() {
+        let nonExistentEvent = createMockEventModel()
+        
+        eventNotFound(when: viewModel.updateEvent, nonExistentEvent, "❌ Event ikke fundet til opdatering.", "Forventer at den fejler, da eventet ikke findes")
+    }
 
     func testDeleteEventByAuthorizedUser() {
-        let expectation = XCTestExpectation(description: "Event burde værre slettet")
+        let expectation = XCTestExpectation(description: "Forventer at event er slettet")
 
-        let event = EventModel(
-            EventTitle: "Zumba",
-            EventDuration: 45,
-            EventTrainer: "mock_uid",
-            EventTrainerName: "Ana",
-            EventLocation: "Studio B",
-            EventMemembers: ["user1", "user2"],
-            EventSlots: 20,
-            EventDate: Date(),
-            EventPicture: "zumba.png",
-            EventDescription: "Join the Zumba fun!"
-        )
+        let currentUser = createMockUser()
+        
+        let lastCreatedEvent = createMockEvent(EventTrainer: currentUser.id)
 
-        mockEventService.mockCurrentUser = User(
-            id: "mock_uid",
-            fullname: "Mock",
-            email: "Mock@gmail.com",
-            role: .instructor,
-            createdEvents: [],
-            attendingEvents: [])
-
-        mockEventService.createEvent(
-            title: event.EventTitle,
-            duration: event.EventDuration,
-            trainerID: event.EventTrainer,
-            trainerName: event.EventTrainerName,
-            location: event.EventLocation,
-            members: event.EventMemembers,
-            slots: event.EventSlots,
-            date: event.EventDate,
-            picture: event.EventPicture,
-            description: event.EventDescription
-        )
-
+        viewModel.deleteEvent(lastCreatedEvent)
+        
         viewModel.$events
             .dropFirst(3)
             .sink { events in
-                XCTAssertTrue(events.isEmpty, "Event burde værre slettet")
+                XCTAssertFalse(events.contains(where: {$0.id == lastCreatedEvent.id}))
                 expectation.fulfill()
             }
             .store(in: &cancellables)
 
-        viewModel.deleteEvent(mockEventService.lastCreatedEvent!)
 
         wait(for: [expectation], timeout: 1.0)
     }
     
-    func testAddMemberToEvent() {
-        let expectation = XCTestExpectation()
+    func testDeleteEventByUnauthorizedUser() {
+        let expectation = XCTestExpectation(description: "Forventer events ikke kan slettes af ikke ansvarlige brugere")
 
-        viewModel.createEvent(
-            title: "Dancing",
-            duration: 45,
-            trainerID: "mock_uid",
-            trainerName: "Gilli",
-            location: "DTU Dancing Studio",
-            members: [],
-            slots: 20,
-            date: Date(),
-            picture: "dancing.png",
-            description: "Join the dancing fun!")
+        createMockUser()
         
-        let eventID = mockEventService.lastCreatedEvent!.id.uuidString
+        let lastCreatedEvent = createMockEvent(EventTrainer: "wrong_uid")
+
+        viewModel.deleteEvent(lastCreatedEvent)
         
-        mockEventService.mockCurrentUser = User(
-            id: "mock_uid",
-            fullname: "Mock",
-            email: "Mock@gmail.com",
-            role: .instructor,
-            createdEvents: [],
-            attendingEvents: [])
+        viewModel.$lastError
+            .dropFirst()
+            .sink { error in
+                if let error = error {
+                    XCTAssertEqual(error.description, "❌ Du har ikke tilladelse til at slette dette event.")
+                    expectation.fulfill()
+                }
+            }
+            .store(in: &cancellables)
+
+
+        wait(for: [expectation], timeout: 1.0)
+    }
+    
+    func testEventNotFoundForDeleteEvent() {
+        let nonExistentEvent = createMockEventModel()
+        
+        eventNotFound(when: viewModel.deleteEvent, nonExistentEvent, "❌ Eventet blev ikke fundet til sletning", "Forventer at man ikke kan slette en event")
+    }
+    
+    func testAddMemberToEvent() {
+        let expectation = XCTestExpectation(description: "Forventer at events bliver tilføjet til brugeren og at brugeren bliver tilføje til eventet")
+
+        let lastCreatedEvent = createMockEvent()
+        
+        let eventID = lastCreatedEvent.id.uuidString
+        
+        createMockUser(id: lastCreatedEvent.id.uuidString)
         
         viewModel.addMember(to: eventID)
         
-        let currentUser = mockEventService.mockCurrentUser
         
         viewModel.$events
             .dropFirst(3)
             .sink { events in
                 if let event = events.first {
-                    XCTAssertTrue(event.EventMemembers.contains(where: { $0 == currentUser?.id }))
+                    XCTAssertTrue(event.EventMemembers.contains(where: { $0 == self.mockEventService.mockCurrentUser?.id }) == true)
                 }
-                XCTAssertTrue(currentUser!.attendingEvents.contains(where: {$0 == eventID}))
+                XCTAssertTrue(self.mockEventService.mockCurrentUser?.attendingEvents.contains(where: { $0 == eventID }) == true)
                 expectation.fulfill()
+            }
+            .store(in: &cancellables)
+        
+        
+        wait(for: [expectation], timeout: 1.0)
+    }
+    
+    func testEventNotFoundForAddMember() {
+        let nonExistentEvent = createMockEventModel()
+        
+        eventNotFound(when: nil, when: viewModel.addMember, nonExistentEvent, "❌ Kan ikke tilføje medlem, event ikke fundet!", "Forventer at man ikke kan tilføje medlem, da eventet ikke blev fundet")
+    }
+    
+    func testMemberNotLoggedIn() {
+        let expectation = XCTestExpectation()
+
+        let lastCreatedEvent = createMockEvent()
+        
+        let eventID = lastCreatedEvent.id.uuidString
+        
+        viewModel.addMember(to: eventID)
+                
+        viewModel.$lastError
+            .dropFirst()
+            .sink { error in
+                if let error = error {
+                    XCTAssertEqual(error.description, "❌ Ikke logget ind!")
+                    expectation.fulfill()
+                }
             }
             .store(in: &cancellables)
         
@@ -245,20 +244,10 @@ final class EventTests: XCTestCase {
         let expectation = XCTestExpectation()
         
         let userID = "member_uid"
-
-        viewModel.createEvent(
-            title: "Dancing",
-            duration: 45,
-            trainerID: "mock_uid",
-            trainerName: "Gilli",
-            location: "DTU Dancing Studio",
-            members: [userID],
-            slots: 20,
-            date: Date(),
-            picture: "dancing.png",
-            description: "Join the dancing fun!")
         
-        let eventID = mockEventService.lastCreatedEvent!.id.uuidString
+        let lastCreatedEvent = createMockEvent(EventMemembers: [userID])
+        
+        let eventID = lastCreatedEvent.id.uuidString
         
         mockEventService.mockCurrentUser = User(
             id: "mock_uid",
@@ -285,6 +274,133 @@ final class EventTests: XCTestCase {
         
         
         wait(for: [expectation], timeout: 1.0)
+    }
+    
+    func eventNotFound(
+        when performingForEventModel: ((_ event: EventModel) -> Void)? = nil,
+        when performingForEventID: ((_ id: String) -> Void)? = nil,
+        _ data: EventModel,
+        _ expectedErrorMessage: String,
+        _ expectationMessage: String
+    ) {
+            let expectation = XCTestExpectation(description: expectationMessage)
+            
+            createMockUser()
+            
+            createMockEvent()
+            
+            viewModel.$lastError
+                .dropFirst()
+                .sink { error in
+                    if let error = error {
+                        XCTAssertEqual(error.description, expectedErrorMessage)
+                        expectation.fulfill()
+                    }
+                }
+                .store(in: &cancellables)
+        
+            if let callingMethodWithEventModel = performingForEventModel {
+                callingMethodWithEventModel(data)
+            } else if let callingMethodWithEventId = performingForEventID {
+                callingMethodWithEventId(data.id.uuidString)
+            }
+            
+            
+            wait(for: [expectation], timeout: 1.0)
+    }
+    
+    @discardableResult
+    private func createMockEventModel(
+        id: UUID? = nil,
+        EventTitle: String = "Pilates",
+        EventDuration: Int = 60,
+        EventTrainer: String = "mock_uid",
+        EventTrainerName: String = "John Doe",
+        EventLocation: String = "DTU Lyngby",
+        EventMemembers: [String] = [],
+        EventSlots: Int = 10,
+        EventDate: Date = Date(),
+        EventPicture: String = "event.png",
+        EventDescription: String = "Description"
+    ) -> EventModel {
+        let event = EventModel(
+            id: id ?? UUID(),
+            EventTitle: EventTitle,
+            EventDuration: EventDuration,
+            EventTrainer: EventTrainer,
+            EventTrainerName: EventTrainerName,
+            EventLocation: EventLocation,
+            EventMemembers: EventMemembers,
+            EventSlots: EventSlots,
+            EventDate: Date(),
+            EventPicture: EventPicture,
+            EventDescription: EventDescription
+        )
+        
+        return event
+    }
+    
+    @discardableResult
+    private func createMockEvent(
+        id: UUID? = nil,
+        EventTitle: String = "Pilates",
+        EventDuration: Int = 60,
+        EventTrainer: String = "mock_uid",
+        EventTrainerName: String = "John Doe",
+        EventLocation: String = "DTU Lyngby",
+        EventMemembers: [String] = [],
+        EventSlots: Int = 10,
+        EventDate: Date = Date(),
+        EventPicture: String = "event.png",
+        EventDescription: String = "Description"
+    ) -> EventModel {
+        
+        let event = createMockEventModel(
+            id: id,
+            EventTitle: EventTitle,
+            EventDuration: EventDuration,
+            EventTrainer: EventTrainer,
+            EventTrainerName: EventTrainerName,
+            EventLocation: EventLocation,
+            EventMemembers: EventMemembers,
+            EventSlots: EventSlots,
+            EventDate: EventDate,
+            EventPicture: EventPicture,
+            EventDescription: EventDescription
+        )
+        
+        mockEventService.createEvent(
+            title: event.EventTitle,
+            duration: event.EventDuration,
+            trainerID: event.EventTrainer,
+            trainerName: event.EventTrainerName,
+            location: event.EventLocation,
+            members: event.EventMemembers,
+            slots: event.EventSlots,
+            date: event.EventDate,
+            picture: event.EventPicture,
+            description: event.EventDescription
+        )
+        return mockEventService.lastCreatedEvent!
+    }
+    
+    @discardableResult
+    private func createMockUser(
+        id: String = "mock_uid",
+        fullname: String = "Mock",
+        email: String = "Mock@gmail.com",
+        createdEvents: [String] = [],
+        attendingEvents: [String] = []
+    ) -> User {
+        mockEventService.mockCurrentUser = User(
+            id: id,
+            fullname: fullname,
+            email: email,
+            role: .instructor,
+            createdEvents: createdEvents,
+            attendingEvents: attendingEvents)
+        
+        return mockEventService.mockCurrentUser!
     }
     
 }

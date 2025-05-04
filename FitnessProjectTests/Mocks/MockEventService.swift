@@ -58,13 +58,14 @@ class MockEventService: EventServiceProtocol {
             errorSubject.send("❌ Du har ikke tilladelse til at opdatere dette event.")
             return
         }
-
-        if let index = createdEvents.firstIndex(where: { $0.id == event.id }) {
-            createdEvents[index] = event
-            eventsSubject.send(createdEvents)
-        } else {
+        
+        guard let index = createdEvents.firstIndex(where: { $0.id == event.id }) else {
             errorSubject.send("❌ Event ikke fundet til opdatering.")
+            return
         }
+        
+        createdEvents[index] = event
+        eventsSubject.send(createdEvents)
     }
     
     func deleteEvent(_ event: EventModel) {
@@ -72,13 +73,14 @@ class MockEventService: EventServiceProtocol {
             errorSubject.send("❌ Du har ikke tilladelse til at slette dette event.")
             return
         }
-
-        if let index = createdEvents.firstIndex(where: { $0.id == event.id }) {
-            createdEvents.remove(at: index)
-            eventsSubject.send(createdEvents)
-        } else {
-            errorSubject.send("❌ Eventet blev ikke fundet.")
+        
+        guard let index = createdEvents.firstIndex(where: { $0.id == event.id }) else {
+            errorSubject.send("❌ Eventet blev ikke fundet til sletning")
+            return
         }
+
+        createdEvents.remove(at: index)
+        eventsSubject.send(createdEvents)
     }
     
     func addMember(to eventID: String) {
@@ -87,13 +89,15 @@ class MockEventService: EventServiceProtocol {
             return
         }
         
-        //Tilføjer brugerens id til EventMembers attributen som matcher eventID
-        if let index = createdEvents.firstIndex(where: {$0.id.uuidString == eventID}) {
-            createdEvents[index].EventMemembers.append(currentUser.id)
-            eventsSubject.send(createdEvents)
-        } else {
-            errorSubject.send("❌ Event findes ikke!")
+        guard let index = createdEvents.firstIndex(where: { $0.id.uuidString == eventID }) else {
+            errorSubject.send("❌ Kan ikke tilføje medlem, event ikke fundet!")
+            return
         }
+        
+        //Tilføjer brugerens id til EventMembers attributen som matcher eventID
+        
+        createdEvents[index].EventMemembers.append(currentUser.id)
+        eventsSubject.send(createdEvents)
         
         //Tilføjer EventID'et i brugerens attendingEvents liste
         currentUser.attendingEvents.append(eventID)
@@ -106,21 +110,23 @@ class MockEventService: EventServiceProtocol {
             return
         }
         
-        //Fjerner brugeren fra EventMembers attributten som macther eventID'et
-        if let index = createdEvents.firstIndex(where: {$0.id.uuidString == eventID}) {
-            createdEvents[index].EventMemembers.remove(at: index)
-            eventsSubject.send(createdEvents)
-        } else {
+        //Fjerne brugeren fra EventsMembers
+        guard let index = createdEvents.firstIndex(where: { $0.id.uuidString == eventID }) else {
             errorSubject.send("❌ Kunne ikke slette brugeren fra event!")
+            return
         }
         
+        createdEvents[index].EventMemembers.remove(at: index)
+        eventsSubject.send(createdEvents)
+        
         //Fjerner eventet fra AttendingEvent
-        if let userIndex = currentUser.attendingEvents.firstIndex(where: {$0 == eventID}) {
-            currentUser.attendingEvents.remove(at: userIndex)
-            mockCurrentUser = currentUser
-        } else {
+        guard let userIndex = currentUser.attendingEvents.firstIndex(where: { $0 == eventID }) else {
             errorSubject.send("❌ Kunne ikke slette eventet fra AttendingEvent")
+            return
         }
+        
+        currentUser.attendingEvents.remove(at: userIndex)
+        mockCurrentUser = currentUser
     }
     
     
