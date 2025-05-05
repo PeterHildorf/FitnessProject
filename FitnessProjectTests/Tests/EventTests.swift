@@ -55,7 +55,7 @@ final class EventTests: XCTestCase {
     }
     
     func testUpdateEventByAuthorizedUser() {
-        let expectation = XCTestExpectation(description: "Forventer at eventet opdateres")
+        let expectation = XCTestExpectation(description: "Expecting the event to be updated")
 
         let currentUser = createMockUser()
         
@@ -63,7 +63,7 @@ final class EventTests: XCTestCase {
 
         let updatedEvent = EventModel(
             id: originalEvent.id,
-            EventTitle: "Opdateret Title",
+            EventTitle: "Updated Title",
             EventDuration: originalEvent.EventDuration,
             EventTrainer: originalEvent.EventTrainer,
             EventTrainerName: originalEvent.EventTrainerName,
@@ -82,7 +82,7 @@ final class EventTests: XCTestCase {
             .dropFirst(3)
             .sink { events in
                 if let updatedEvent = events.first {
-                    XCTAssertEqual(updatedEvent.EventTitle, "Opdateret Title")
+                    XCTAssertEqual(updatedEvent.EventTitle, "Updated Title")
                     expectation.fulfill()
                 }
             }
@@ -93,7 +93,7 @@ final class EventTests: XCTestCase {
     }
     
     func testUpdateEventByUnauthorizedUser() {
-        let expectation = XCTestExpectation(description: "Forventer at man ikke kan opdateret en event")
+        let expectation = XCTestExpectation(description: "Expecting that an event cannot be updated")
         
         createMockUser()
         
@@ -101,7 +101,7 @@ final class EventTests: XCTestCase {
         
         let updatedEvent = EventModel(
             id: originalEvent.id,
-            EventTitle: "Opdateret Title",
+            EventTitle: "Updated Title",
             EventDuration: originalEvent.EventDuration,
             EventTrainer: originalEvent.EventTrainer,
             EventTrainerName: originalEvent.EventTrainerName,
@@ -119,7 +119,7 @@ final class EventTests: XCTestCase {
             .dropFirst()
             .sink { error in
                 if let error = error {
-                    XCTAssertEqual(error.description, "❌ Du har ikke tilladelse til at opdatere dette event.")
+                    XCTAssertEqual(error.description, "❌ You do not have permission to update this event.")
                     expectation.fulfill()
                 }
             }
@@ -131,11 +131,11 @@ final class EventTests: XCTestCase {
     func testEventNotFoundForUpdateEvent() {
         let nonExistentEvent = createMockEventModel()
         
-        eventNotFound(when: viewModel.updateEvent, nonExistentEvent, "❌ Event ikke fundet til opdatering.", "Forventer at den fejler, da eventet ikke findes")
+        eventNotFound(when: viewModel.updateEvent, nonExistentEvent, "❌ Event not found for update.", "Expected to fail, as the event does not exist")
     }
 
     func testDeleteEventByAuthorizedUser() {
-        let expectation = XCTestExpectation(description: "Forventer at event er slettet")
+        let expectation = XCTestExpectation(description: "Expected the event to be deleted")
 
         let currentUser = createMockUser()
         
@@ -156,7 +156,7 @@ final class EventTests: XCTestCase {
     }
     
     func testDeleteEventByUnauthorizedUser() {
-        let expectation = XCTestExpectation(description: "Forventer events ikke kan slettes af ikke ansvarlige brugere")
+        let expectation = XCTestExpectation(description: "Expecting that events cannot be deleted by non-authorized users")
 
         createMockUser()
         
@@ -168,7 +168,7 @@ final class EventTests: XCTestCase {
             .dropFirst()
             .sink { error in
                 if let error = error {
-                    XCTAssertEqual(error.description, "❌ Du har ikke tilladelse til at slette dette event.")
+                    XCTAssertEqual(error.description, "❌ You do not have permission to delete this event.")
                     expectation.fulfill()
                 }
             }
@@ -181,11 +181,11 @@ final class EventTests: XCTestCase {
     func testEventNotFoundForDeleteEvent() {
         let nonExistentEvent = createMockEventModel()
         
-        eventNotFound(when: viewModel.deleteEvent, nonExistentEvent, "❌ Eventet blev ikke fundet til sletning", "Forventer at man ikke kan slette en event")
+        eventNotFound(when: viewModel.deleteEvent, nonExistentEvent, "❌ The event was not found for deletion", "Expecting that an event cannot be deleted")
     }
     
     func testAddMemberToEvent() {
-        let expectation = XCTestExpectation(description: "Forventer at events bliver tilføjet til brugeren og at brugeren bliver tilføje til eventet")
+        let expectation = XCTestExpectation(description: "Expecting that events will be added to the user and the user will be added to the event")
 
         let lastCreatedEvent = createMockEvent()
         
@@ -214,7 +214,7 @@ final class EventTests: XCTestCase {
     func testEventNotFoundForAddMember() {
         let nonExistentEvent = createMockEventModel()
         
-        eventNotFound(when: nil, when: viewModel.addMember, nonExistentEvent, "❌ Kan ikke tilføje medlem, event ikke fundet!", "Forventer at man ikke kan tilføje medlem, da eventet ikke blev fundet")
+        eventNotFound(when: nil, when: viewModel.addMember, nonExistentEvent, "❌ Cannot add member, event not found!", "Expecting that a member cannot be added, as the event was not found.")
     }
     
     func testMemberNotLoggedIn() {
@@ -230,7 +230,7 @@ final class EventTests: XCTestCase {
             .dropFirst()
             .sink { error in
                 if let error = error {
-                    XCTAssertEqual(error.description, "❌ Ikke logget ind!")
+                    XCTAssertEqual(error.description, "❌ Not signed in!")
                     expectation.fulfill()
                 }
             }
