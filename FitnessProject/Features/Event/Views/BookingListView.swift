@@ -11,6 +11,9 @@ import Foundation
 struct BookingListView: View {
     
     @StateObject var viewModel: ListViewModel
+    @EnvironmentObject var eventDataVM: EventDataViewModel
+    @EnvironmentObject private var authVM: AuthViewModel
+    
     
     var body: some View {
         NavigationStack {
@@ -41,43 +44,36 @@ struct BookingListView: View {
                 }
                 
                 Divider()
+                    .background(Color.blue)
                 
                 // Liste over events
                 ScrollView {
-                    ForEach(viewModel.sortedEventsAsc) { event in
-                        NavigationLink {
-                            EventFullView(
-                                event: event,
-                                dataViewModel: viewModel.data,
-                                eventViewModel: EventViewModel(data: viewModel.data)
-                            )
-                        } label: {
-                            // Her sender du data med ind i boksen:
-                            EventBoxView(data: viewModel.data, event: event)
+                    let eventsForDate = eventDataVM.events
+                        .filter { Calendar.current.isDate($0.EventDate, inSameDayAs: viewModel.selectedDate) }
+                        .sorted { $0.EventDate < $1.EventDate }
+                    //henter events ned udfra dato, så det sorteret
+                    ForEach(eventsForDate) { event in
+                        NavigationLink(value: event) {
+                            EventBoxView(event: event)
                         }
-                        .foregroundColor(.black)
-                        
-                        if event.id != viewModel.sortedEventsAsc.last?.id {
-                            Divider()
-                        }
-                        
+                        .tint(.black)
                     }
                 }
-                NavigationLink {
-                    EventCreateView(viewModel: EventViewModel(data: viewModel.data))
-                } label: {
-                    Text("+")
-                        .font(.largeTitle)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(22)
+                .navigationDestination(for: EventModel.self) { event in
+                    EventFullView(eventID: event.id)
+                }
+                if authVM.currentRole == .instructor {
+                    NavigationLink("＋") {
+                        EventCreateView()
+                    }
+                    .font(.system(size: 40, weight: .bold))
+                    .padding(8)
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(12)
                 }
             }
         }
-        .navigationTitle("Booking")
-        .navigationBarTitleDisplayMode(.inline)
-        
     }
     
     
@@ -98,9 +94,3 @@ struct BookingListView: View {
 
 
 
-
-struct BookingListView_Preview: PreviewProvider {
-    static var previews: some View {
-        BookingListView(viewModel: ListViewModel(data: DataViewModel(), year: Calendar.current.component(.year, from: Date())))
-    }
-}

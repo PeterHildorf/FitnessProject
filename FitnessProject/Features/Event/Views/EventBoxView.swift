@@ -8,24 +8,37 @@
 
 import SwiftUI
 import Foundation
-
+import FirebaseAuth
 struct EventBoxView: View {
     
-    @ObservedObject var data: DataViewModel        // <-- her får vi fat i din DataViewModel
-    @State private var booked = false
+    @EnvironmentObject private var eventDataVM: EventDataViewModel
     let event: EventModel
     
     let buttonWidth: CGFloat = 45
     let buttonHeight: CGFloat = 25
     
-    // Dynamisk læsning af antal deltagere så vi sikre os at når der bliver ændrede i antallet af deltagerene i events så bliver det opdateret
+    // Læser altid live fra EventDataViewModel.events-liste
     private var memberCount: Int {
-        guard let idx = data.events.firstIndex(where: { $0.id == event.id }) else {
+        if let idx = eventDataVM.events.firstIndex(where: { $0.id == event.id }) {
+            return eventDataVM.events[idx].EventMemembers.count
+        } else {
             return event.EventMemembers.count
         }
-        return data.events[idx].EventMemembers.count
     }
     
+    private var isBooked: Bool {
+        guard let uid = Auth.auth().currentUser?.uid else { return false }
+        return eventDataVM.events
+            .first(where: { $0.id == event.id })?
+            .EventMemembers
+            .contains(uid) ?? false
+    }
+    
+    /// true når arrangementet er fyldt *og* man ikke er tilmeldt
+    private var isLocked: Bool {
+        isFull && !isBooked
+    }
+
     private var isFull: Bool {
         memberCount >= event.EventSlots
     }
@@ -46,11 +59,11 @@ struct EventBoxView: View {
                 
             }
             Spacer()
-            VStack(alignment: .leading) {
+            VStack(alignment: .trailing) {
                 
                 Text(event.EventTitle)
                     .bold()
-                Text("m/\(event.EventTrainer)")
+                Text("m/\(event.EventTrainerName)")
                 Text(event.EventLocation)
                     .font(.footnote)
             }
@@ -58,32 +71,27 @@ struct EventBoxView: View {
             
             Spacer()
             VStack{
-                Button( action: {
-                    //skal opdatere en liste
-                    guard !isFull || booked else { return }
-                    booked.toggle()
-                    if booked {
-                        data.addMember(to: event.id, member: "Alexander")     // indsæt den rigtige bruger‑streng her
+                Button {
+                    if isBooked {
+                        eventDataVM.removeMember(from: event.id.uuidString)
                     } else {
-                        data.removeMember(from: event.id, member: "Alexander")
+                        eventDataVM.addMember(to: event.id.uuidString)
                     }
-                    print("Tryk")
-                }) {
-                    Group{
-                        if isFull {
+                } label: {
+                    Group {
+                        if isLocked {
                             Text("Full")
-                        }
-                        else if booked {
+                        } else if isBooked {
                             Image(systemName: "checkmark.circle.fill")
                         } else {
                             Text("Book")
                         }
                     }
                     .frame(minWidth: buttonWidth, minHeight: buttonHeight)
-                    
                 }
                 .buttonStyle(.bordered)
-                .tint(isFull ? .red : .blue)   // rød når fuld, blå ellers
+                .tint(isLocked ? .red : .blue)
+                .disabled(isLocked)
                 Label("\(memberCount)/\(event.EventSlots)", systemImage: "person")
                     .font(.footnote)
                 
@@ -95,13 +103,3 @@ struct EventBoxView: View {
 }
 
 
-
-struct EventBoxView_Previews: PreviewProvider {
-    static var previews: some View {
-        // Opret en preview‑instans af din DataViewModel
-        let previewData = DataViewModel()
-        // Giv EventBoxView både data og event
-        EventBoxView(data: previewData,
-                     event: EventModel.sampleData[0])
-    }
-}

@@ -42,10 +42,9 @@ struct SignUpView: View {
                         .clipShape(.rect(cornerRadius: 10))
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
-                                .stroke(showFullnameValidation ? Color.red : isFullnameFocused ? Color.blue : Color.clear, lineWidth: 2) // Rounded border
+                                .stroke(showFullnameValidation ? Color.red : isFullnameFocused ? Color.blue : Color.clear, lineWidth: 2)
                         )
                         .onChange(of: isFullnameFocused) { oldValue, newValue in
-                            // When focus is lost, validate
                             if !newValue {
                                 showFullnameValidation = fullname.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                             }
@@ -73,10 +72,9 @@ struct SignUpView: View {
                         .clipShape(.rect(cornerRadius: 10))
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
-                                .stroke(showEmailValidation ? Color.red : isEmailFocused ? Color.blue : Color.clear, lineWidth: 2) // Rounded border
+                                .stroke(showEmailValidation ? Color.red : isEmailFocused ? Color.blue : Color.clear, lineWidth: 2)
                         )
                         .onChange(of: isEmailFocused) { oldValue, newValue in
-                                // When focus is lost, validate
                                 if !newValue {
                                     showEmailValidation = email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                                 }

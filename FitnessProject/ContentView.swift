@@ -12,11 +12,41 @@ struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
     @EnvironmentObject var AuthVM: AuthViewModel
-    @StateObject var dataVM = DataViewModel()
+    @EnvironmentObject var eventDataVM: EventDataViewModel
 
+    @State private var valgteTab: Tab = .booking
+    
+    enum Tab {
+            case booking, profil
+        }
+    
     var body: some View {
         if AuthVM.userSession != nil {
-            BookingListView(viewModel: ListViewModel(data: dataVM, year: Calendar.current.component(.year, from: Date())))
+            TabView(selection: $valgteTab) {
+                NavigationStack {
+                    //booking
+                    BookingListView(viewModel: ListViewModel(
+                        data: eventDataVM,
+                        year: Calendar.current.component(.year, from: Date())))
+                    .navigationTitle("")
+                }
+                .tabItem {
+                    Label("Booking", systemImage: "calendar")
+                }
+                .tag(Tab.booking)
+                
+                //Profile
+                NavigationStack {
+                    ProfileView()
+                        .navigationTitle("")
+                }
+                .tabItem {
+                    Label("Profil", systemImage: "person.crop.circle")
+                }
+                .tag(Tab.profil)
+
+            }
+            
         } else {
             GetStartedView()
         }

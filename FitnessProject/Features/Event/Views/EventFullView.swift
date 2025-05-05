@@ -1,77 +1,92 @@
-//
-//  TrainerView.swift
-//  FitnessProject
-//
-//  Created by Peter Hannibal Hildorf on 01/04/2025.
-//
-
-
 import SwiftUI
 
 struct EventFullView: View {
-    let event: EventModel
-    @StateObject var viewModel = FullViewModel()
-    @ObservedObject var dataViewModel: DataViewModel
-    @StateObject var eventViewModel: EventViewModel
-    
-    @Environment(\.dismiss) var dismiss  // Gør dig klar til at lukke viewet
+    let eventID: UUID
+    @EnvironmentObject private var eventDataVM: EventDataViewModel
+    @StateObject   private var fullVM      = FullViewModel()
+    @EnvironmentObject private var authVM: AuthViewModel         
+    @Environment(\.dismiss) private var dismiss
 
-    
-    
+    private var event: EventModel? {
+        eventDataVM.events.first { $0.id == eventID }
+    }
+
     var body: some View {
-        ScrollView{
-            VStack {
-                ZStack {
-                    //EventPicture
-                    Image(event.EventPicture)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .cornerRadius(29)
-                        .shadow(radius: 10)
+        Group {
+            if let event = event {
+                ScrollView {
+                    VStack {
+                        ZStack {
+                            Image(event.EventPicture)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .cornerRadius(29)
+                                .shadow(radius: 10)
+                                .padding()
+                            Text(event.EventTitle)
+                                .foregroundColor(.white)
+                                .font(.largeTitle)
+                        }
+
+                        HStack {
+                            Label("\(event.EventDuration) min", systemImage: "clock")
+                            Spacer()
+                            Label(fullVM.formattedDate(for: event.EventDate),
+                                  systemImage: "calendar")
+                        }
                         .padding()
-                    
-                    
-                    Text(event.EventTitle)
-                        .foregroundColor(.white)
-                        .font(.largeTitle)
-                }
-                HStack {
-                    Label("\(event.EventDuration)"+" min",systemImage: "clock")
-                    Spacer()
-                    Label("\(viewModel.formattedDate(for: event.EventDate))", systemImage: "calendar")
-                }
-                .padding()
-                VStack(alignment: .leading, spacing: 40){
-                    HStack {
-                        Label(event.EventLocation, systemImage: "location")
-                        Spacer()
-                        Label("\(event.EventMemembers.count)/\(event.EventSlots)", systemImage: "person.3")
+
+                        VStack(alignment: .leading, spacing: 40) {
+                            HStack {
+                                Label(event.EventLocation, systemImage: "location")
+                                Spacer()
+                                Label("\(event.EventMemembers.count)/\(event.EventSlots)",
+                                      systemImage: "person.3")
+                            }
+                            Label(event.EventTrainerName, systemImage: "person")
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+
+                        
+                        Text(event.EventDescription)
+                            .padding(8)
+                            .multilineTextAlignment(.leading)
+                            .frame(maxWidth: .infinity, minHeight: 120, alignment: .topLeading)
+                            .background(Color.white)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.blue, lineWidth: 1)
+                            )
+                            .padding(.horizontal)
                     }
-                    Label (event.EventTrainer, systemImage: "person")
-                    
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding()
-                Divider()
-                Text(event.EventDescription)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                
-            }
-        }
-        .navigationTitle(event.EventTitle)
-        .toolbar {
-            // Alternativt placeres knappen i en toolbar
-            NavigationLink(destination: EditEventView(viewModel: EventViewModel(data: dataViewModel), event: event)) {
-                Text("Rediger Event")
-            }
-        }
-        .toolbar{
-            ToolbarItem(placement: .bottomBar) {
-                Button("Slet Eventet") {
-                    eventViewModel.deleteEvents(event)
-                    dismiss()
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    // Rediger-knappen
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        if authVM.currentRole == .instructor {
+                            NavigationLink("Rediger") {
+                                EditEventView(eventID: eventID)
+                            }
+                        }
+                    }
+                    // Slet-knappen
+                    ToolbarItem(placement: .bottomBar) {
+                        if authVM.currentRole == .instructor {
+                            Button("Slet eventet") {
+                                eventDataVM.deleteEvent(event)
+                                dismiss()
+                            }
+                            .foregroundColor(.red)
+                        }
+                    }
                 }
+
+            } else {
+                // Når eventet er fjernet, luk viewet automatisk
+                Color.clear
+                    .onAppear { dismiss() }
             }
         }
     }
