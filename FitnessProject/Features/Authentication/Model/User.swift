@@ -21,10 +21,11 @@ struct User: Identifiable, Codable, Hashable {
     let email: String
     var role: UserRole
 
-    // Listen af event-IDs, som instructoren har oprettet
+    // The list of event IDs created by the instructor.
     var createdEvents: [EventID]
 
-    // Listen af event-IDs, som useren har tilmeldt sig
+    // List of event IDs the member is registered for.
+
     var attendingEvents: [EventID]
     
     var initials: String {

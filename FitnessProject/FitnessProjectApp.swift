@@ -19,7 +19,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         
         FirebaseApp.configure()
         // 🔥 40 MB er default – her sætter vi 100 MB
-        var settings = Firestore.firestore().settings
+        let settings = Firestore.firestore().settings
         let bytes = 100 * 1024 * 1024          // Int
         settings.cacheSettings = PersistentCacheSettings(
             sizeBytes: NSNumber(value: bytes)  // ← wrap som NSNumber
@@ -35,7 +35,6 @@ struct FitnessProjectApp: App {
     // register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
-    let persistenceController = PersistenceController.shared
     
     @StateObject var AuthVM = AuthViewModel()
     

@@ -40,16 +40,14 @@ struct GetStartedView: View {
                         .background(Color.white)
                         .clipShape(.rect(cornerRadius: 20))
                     }
-                    HStack {
-                        Text("New around here?")
-                        Button {
-                            
-                        } label: {
+                    NavigationLink(destination: SignUpView()) {
+                        HStack {
+                            Text("New around here?")
                             Text("Sign up")
                         }
+                        .padding(.top, 20)
+                        .font(.system(size: 16, weight: .light, design: .rounded))
                     }
-                    .padding(.top, 20)
-                    .font(.system(size: 16, weight: .light, design: .rounded))
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)

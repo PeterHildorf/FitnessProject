@@ -117,6 +117,8 @@ final class AuthenticationTest: XCTestCase {
         await assertEqualValidationError(email, password, "Invalid Password", "Password must be at least 6 characters long")
     }
     
+    //MARK: - HELPERS
+    
     func assertEqualValidationError(_ email: String,_ password: String,_ expectedErrorDescription: String,_ expectedFailureReason: String) async {
         
         try? await viewModel.createNewUser(email, password, "Instructor", "Mock")

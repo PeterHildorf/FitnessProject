@@ -13,8 +13,7 @@ struct ProfileView: View {
     var body: some View {
            if let user = viewModel.currentUser {
                ZStack {
-                   // Blå baggrund bag listen – men kun top safe area
-                   Color.blue
+                   Color.gray.opacity(0.2)
                        .ignoresSafeArea(edges: .top)
 
                    List {
@@ -52,7 +51,7 @@ struct ProfileView: View {
                                    .clipShape(RoundedRectangle(cornerRadius: 10))
                            }
                        }
-                       .foregroundColor(.white)
+                       .foregroundColor(.black)
 
                        Section("Account") {
                            Button {
@@ -63,11 +62,11 @@ struct ProfileView: View {
                                                tintColor: .red)
                            }
                        }
-                       .foregroundColor(.white)
+                       .foregroundColor(.black)
                    }
                    .scrollContentBackground(.hidden)
-                   // fjerner kun den indbyggede baggrund for LIST-scrollview'en,
-                   // så vores Color.blue fra ZStack kan skinne igennem sektionerne
+                   // Only removes the built-in background of the LIST scrollview.
+                   // So that our Color.gray.opacity(0.2) from the ZStack can shine through the sections.
                }
            }
        }
