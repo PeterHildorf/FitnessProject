@@ -12,7 +12,7 @@ class FullViewModel: ObservableObject {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "da_DK")
         formatter.timeZone = TimeZone(identifier: "Europe/Copenhagen")
-        formatter.dateStyle = .long  // Fx "7. april 2025"
+        formatter.dateStyle = .long  // ex. "7. april 2025"
         formatter.timeStyle = .none
         return formatter.string(from: date)
     }

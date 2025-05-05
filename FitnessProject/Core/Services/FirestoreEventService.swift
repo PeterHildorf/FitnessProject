@@ -7,12 +7,12 @@ import FirebaseAuth
 
 class FirestoreEventService: EventServiceProtocol {
     
-    // Subjects som vi pusher nye data ind i
+    // Subjects that takes the data
     private let eventsSubject      = CurrentValueSubject<[EventModel], Never>([])
     private let instructorsSubject = CurrentValueSubject<[User], Never>([])
     let errorSubject = PassthroughSubject<String, Never>()
     
-    // Exponer som AnyPublisher
+    //makes event, instructs, and errors as read only publishers
     var eventsPublisher: AnyPublisher<[EventModel], Never> {
         eventsSubject.eraseToAnyPublisher()
     }

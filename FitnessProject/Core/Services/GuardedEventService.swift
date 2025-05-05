@@ -18,7 +18,7 @@ final class GuardedEventService: EventServiceProtocol {
         rolePublisher: Published<UserRole>.Publisher
     ) {
         self.inner = inner
-        // lyt til rolle-ændringer
+        // lissten to role changes
         self.cancellable = rolePublisher
             .sink { [weak self] role in self?.currentRole = role }
     }
@@ -27,7 +27,7 @@ final class GuardedEventService: EventServiceProtocol {
     var eventsPublisher: AnyPublisher<[EventModel], Never>       { inner.eventsPublisher }
     var instructorsPublisher: AnyPublisher<[User], Never>        { inner.instructorsPublisher }
 
-    // CRUD med rolle-checks
+    // CRUD with role checking
     func createEvent(
         title: String,
         duration: Int,
@@ -65,7 +65,7 @@ final class GuardedEventService: EventServiceProtocol {
         inner.deleteEvent(e)
     }
 
-    // Instruktør *og* medlem må booke/afmelde
+    // instructor and member can book or unbook events
     func addMember(to id: String)         { inner.addMember(to: id) }
     func removeMember(from id: String)    { inner.removeMember(from: id) }
 }

@@ -63,7 +63,7 @@ struct EventFullView: View {
                 }
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
-                    // Rediger-knappen
+                    // edit Button
                     ToolbarItem(placement: .navigationBarTrailing) {
                         if authVM.currentRole == .instructor {
                             NavigationLink("Rediger") {
@@ -71,7 +71,7 @@ struct EventFullView: View {
                             }
                         }
                     }
-                    // Slet-knappen
+                    // remove button
                     ToolbarItem(placement: .bottomBar) {
                         if authVM.currentRole == .instructor {
                             Button("Slet eventet") {
@@ -84,7 +84,7 @@ struct EventFullView: View {
                 }
 
             } else {
-                // Når eventet er fjernet, luk viewet automatisk
+                // when event is deleted dismiss view
                 Color.clear
                     .onAppear { dismiss() }
             }

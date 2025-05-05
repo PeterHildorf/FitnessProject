@@ -57,7 +57,7 @@ struct EventFormView: View {
                         .fill(Color(.blue))
                 )
                 .tint(.white)
-                // 3) Instruktør
+                // 3) instructor
                 Text("Instruktør").font(.headline)
                 
                 if selectedTrainer != nil {
@@ -75,24 +75,24 @@ struct EventFormView: View {
                     )
                     .tint(.white)
                 } else {
-                    Text("No selections available")
+                    Text("ingen instructors at vælge")
                         .foregroundColor(.red)
                 }
                 
-                // 4) Pladser
+                // 4) slots
                 Text("Pladser").font(.headline)
                 Picker("", selection: $slots) {
                     ForEach(slotOptions, id: \.self) { Text("\($0)").tag($0) }
                 }
                 .pickerStyle(.segmented)
                 
-                // 5) Lokation
+                // 5) location
                 Text("Lokation").font(.headline)
                 TextField("Indtast lokation", text: $location)
                     .textFieldStyle(UnderlinedTextFieldStyle(lineColor: isFormValid ? .blue : .red))
                     .padding(.vertical, 2)
                     
-                // 6) Dato & tid
+                // 6) Date and time
                 Text("Dato & tid").font(.headline)
                 DatePicker("",
                            selection: $date,
@@ -101,13 +101,13 @@ struct EventFormView: View {
                 )
                 .datePickerStyle(.compact)
                 
-                // 7) Beskrivelse
+                // 7) description
                 Text("Beskrivelse").font(.headline)
                 TextEditor(text: $description)
                     .outlinedTextEditorStyle()
                     .frame(height: 100)
                 
-                // 8) Knap
+                // 8) button
                 Button(buttonTitle, action: buttonAction)
                     .disabled(!isFormValid)
                     .frame(maxWidth: .infinity, minHeight: 44)
@@ -125,7 +125,7 @@ struct EventFormView: View {
             }
             .padding()
         }
-        // Lyt på instructors-publisheren, ikke .onAppear
+        // listen to instruct publisher
         .onReceive(eventVM.$instructors) { instructors in
             guard selectedTrainer == nil,
                   !instructors.isEmpty,

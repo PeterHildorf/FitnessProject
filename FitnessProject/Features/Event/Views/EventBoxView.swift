@@ -17,7 +17,7 @@ struct EventBoxView: View {
     let buttonWidth: CGFloat = 45
     let buttonHeight: CGFloat = 25
     
-    // Læser altid live fra EventDataViewModel.events-liste
+    // reads always live from EventDataViewModel.events-list
     private var memberCount: Int {
         if let idx = eventDataVM.events.firstIndex(where: { $0.id == event.id }) {
             return eventDataVM.events[idx].EventMemembers.count
@@ -34,7 +34,7 @@ struct EventBoxView: View {
             .contains(uid) ?? false
     }
     
-    /// true når arrangementet er fyldt *og* man ikke er tilmeldt
+    // true when event is full and not apart of it
     private var isLocked: Bool {
         isFull && !isBooked
     }
@@ -43,7 +43,7 @@ struct EventBoxView: View {
         memberCount >= event.EventSlots
     }
     
-    // func til at ændre tiden til timer og minutter
+    // func to change hours to minutes
     var formattedTime: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"

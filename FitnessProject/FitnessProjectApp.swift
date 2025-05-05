@@ -18,11 +18,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         AppCheck.setAppCheckProviderFactory(providerFactory)
         
         FirebaseApp.configure()
-        // 🔥 40 MB er default – her sætter vi 100 MB
+
         let settings = Firestore.firestore().settings
-        let bytes = 100 * 1024 * 1024          // Int
+        let bytes = 100 * 1024 * 1024          //40MB cache size
         settings.cacheSettings = PersistentCacheSettings(
-            sizeBytes: NSNumber(value: bytes)  // ← wrap som NSNumber
+            sizeBytes: NSNumber(value: bytes)
         )
         Firestore.firestore().settings = settings
         
@@ -40,18 +40,18 @@ struct FitnessProjectApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if let uid = AuthVM.userSession?.uid {      // -------- Login-gren
+            if let uid = AuthVM.userSession?.uid {
                 ContentView()
-                    .environmentObject(AuthVM)          // 2) Auth ned til alle
-                    .environmentObject(                 // 3) NY EventDataVM pr. uid
+                    .environmentObject(AuthVM)          // injecting authVM
+                    .environmentObject(                 // everytime we logout we make sure the eventdataViewmodel is updated
                         EventDataViewModel(
                             service: GuardedEventService(
                                 rolePublisher: AuthVM.$currentRole
                             )
                         )
                     )
-                    .id(uid)                            // 4) tving re-build
-            } else {                                    // -------- Logout-gren
+                    .id(uid)
+            } else {
                 GetStartedView()
                     .environmentObject(AuthVM)
             }

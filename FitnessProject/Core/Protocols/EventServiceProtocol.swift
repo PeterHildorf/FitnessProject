@@ -9,8 +9,7 @@ import Combine
 import FirebaseAuth
 
 protocol EventServiceProtocol {
-    // Definere at der er data for eventmodel og user og fejl
-    
+    // defines that there is data for eventmodel, instructors and errors
     var eventsPublisher: AnyPublisher<[EventModel], Never> { get }
     var instructorsPublisher: AnyPublisher<[User], Never> { get }
     var errorPublisher: AnyPublisher<String, Never> { get }      

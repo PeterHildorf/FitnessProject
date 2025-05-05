@@ -18,10 +18,10 @@ struct BookingListView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
-                // Horisontal scroll med datoer
+                // Horisontal scroll of dates
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 40) {
-                        //loopet iterer igennem alle dagene i arrayet, og opretter DayView til hvert dag som dele de samme properties som vi bruger viewModel
+                        // the loop iterates through all the days in the array and creates DayView to each day
                         ForEach(viewModel.days.indices, id: \.self) { index in
                             let day = viewModel.days[index]
                             let isSelected = (day == viewModel.selectedDate)
@@ -46,12 +46,12 @@ struct BookingListView: View {
                 Divider()
                     .background(Color.blue)
                 
-                // Liste over events
+                // List of events
                 ScrollView {
                     let eventsForDate = eventDataVM.events
                         .filter { Calendar.current.isDate($0.EventDate, inSameDayAs: viewModel.selectedDate) }
                         .sorted { $0.EventDate < $1.EventDate }
-                    //henter events ned udfra dato, så det sorteret
+                    //gets events based on their dates
                     ForEach(eventsForDate) { event in
                         NavigationLink(value: event) {
                             EventBoxView(event: event)

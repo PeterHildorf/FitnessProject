@@ -36,7 +36,7 @@ class EventDataViewModel: ObservableObject {
           .store(in: &cancellables)
         
         service.errorPublisher
-            .map { Optional($0) }                 // String til String?
+            .map { Optional($0) }                 
             .receive(on: DispatchQueue.main)
             .assign(to: \.lastError, on: self)
             .store(in: &cancellables)

@@ -54,7 +54,7 @@ extension EventModel {
             "EventLocation":  EventLocation,
             "EventMemembers": EventMemembers,
             "EventSlots":     EventSlots,
-            // Husk at konvertere Date til Firestore Timestamp
+            // convert time to firebase timestamp
             "EventDate":      Timestamp(date: EventDate),
             "EventPicture":   EventPicture,
             "EventDescription": EventDescription
